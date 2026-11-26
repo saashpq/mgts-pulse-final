@@ -36,6 +36,7 @@ type state struct {
 	Previous   map[string][]survey.Response `json:"previous_responses,omitempty"` // Superseded versions, oldest first.
 	Analyses   map[string]textai.Analysis   `json:"analyses"`
 	Verdicts   map[string]signals.Verdict   `json:"verdicts"`
+	FollowUps  map[string]storedFollowUp    `json:"follow_ups,omitempty"`
 	Thresholds signals.Thresholds           `json:"thresholds"`
 	Tokens     map[string]string            `json:"tokens"` // токен ссылки на анкету → ID участника
 	Events     []Event                      `json:"events"`

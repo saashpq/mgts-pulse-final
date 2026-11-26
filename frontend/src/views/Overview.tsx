@@ -5,10 +5,11 @@ import { LineChart, Sparkline } from '../components/charts';
 import { ThemeMatrix } from '../components/ThemeMatrix';
 import { PriorityCase } from '../components/PriorityCase';
 import { TextReview } from '../components/TextReview';
+import { FollowUpQueue } from '../components/FollowUps';
 import { SEVERITY_MARK, SEVERITY_TEXT, STATUS_TEXT, commaNum, fmt, monthScores, months, pct, pctCI, plural } from '../format';
 import { MIN_DECISIONS, type Effect, type PrecisionTotal, type SignalPrecision } from '../api';
 import { navigate, pairMonthPath, pairPath } from '../router';
-import { CopyButton, Loading, Failure } from './common';
+import { CopyButton, Loading, Failure, StaleData } from './common';
 
 /** Главный экран HR: кто требует вмешательства, как идёт программа, тепловая карта сигналов по месяцам. */
 function submitted(pair: PairReport, role: 'intern' | 'mentor', month: number) {
@@ -20,26 +21,28 @@ export function Overview({ report = false }: { report?: boolean }) {
   const [pairStatus, setPairStatus] = useState('all');
   const [selectedMonth, setSelectedMonth] = useState<number>();
   if (q.isPending) return <Loading />;
-  if (q.isError) return <Failure error={q.error} onRetry={() => q.refetch()} />;
+  if (q.isLoadingError || (report && q.isRefetchError)) return <Failure error={q.error} onRetry={() => q.refetch()} />;
   const r = q.data.report;
   const month = Math.min(selectedMonth ?? r.current, r.current);
   if (r.current === 0)
     return (
-      <section className="sheet">
+      <>{q.isRefetchError && <StaleData retry={() => void q.refetch()} />}<section className="sheet">
         <h2>Данных пока нет</h2>
         <p className="muted">Загрузите выгрузку анкет в разделе «Источники данных» или дождитесь первых ответов по ссылкам.</p>
         <button type="button" className="btn btn--primary" onClick={() => navigate('/sources')}>Перейти к источникам данных</button>
-      </section>
+      </section>{!report && <FollowUpQueue />}</>
     );
   if (report) return <ProgramReport data={q.data} />;
   return (
     <>
+      {q.isRefetchError && <StaleData retry={() => void q.refetch()} />}
       <PriorityCase pairs={r.pairs} current={r.current} />
       <dl className="program-strip" aria-label={`Состояние программы за месяц ${r.current}`}>
         <div><dt>Пар в программе</dt><dd>{r.pairs.length}</dd></div>
         <div><dt>Требуют вмешательства</dt><dd>{r.attention}</dd></div>
         <div><dt>Анкет заполнено · M{r.current}</dt><dd>{pct(r.fill_rate)}</dd></div>
       </dl>
+      <FollowUpQueue />
       <section className="sheet pairs-queue">
         <div className="sheet__head">
           <h2>Пары «стажёр — наставник»</h2>

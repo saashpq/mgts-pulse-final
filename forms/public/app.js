@@ -4,6 +4,9 @@ async function init() {
   const response = await fetch("/" + role + ".json");
   if (!response.ok) throw Error("Не удалось загрузить анкету.");
   const model = new Survey.Model(await response.json());
+  const note = document.createElement("p");
+  note.textContent = "Куратор HR увидит ваши оценки и комментарии вместе с кодом участника и месяцем. Они помогут выбрать вопрос для разговора и проверить, помогла ли договорённость.";
+  document.getElementById("form").before(note);
   model.locale = "ru";
   model.showCompletedPage = false;
   const id = crypto.randomUUID();

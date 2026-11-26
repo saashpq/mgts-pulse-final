@@ -3,7 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 import { api, type FlatSignal, type GroupedSignal, type Severity, type SignalsView } from '../api';
 import { SignalCard } from '../components/SignalCard';
 import { SEVERITY_MARK, SEVERITY_RANK, SEVERITY_TEXT, STATUS_TEXT, plural } from '../format';
-import { Failure, Loading } from './common';
+import { Failure, Loading, StaleData } from './common';
 import './signals-feed.css';
 
 type State = 'active' | 'past' | '';
@@ -98,9 +98,10 @@ export function Signals() {
           </div>
         </div>
       </div>
+      {q.isRefetchError && <StaleData retry={() => void q.refetch()} />}
       {q.isPending ? (
         <Loading />
-      ) : q.isError ? (
+      ) : q.isLoadingError ? (
         <Failure error={q.error} onRetry={() => q.refetch()} />
       ) : shown.length === 0 ? (
         <section className="signals-empty">

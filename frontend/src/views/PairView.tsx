@@ -5,7 +5,7 @@ import { DumbbellChart, LineChart } from '../components/charts';
 import { SignalCard } from '../components/SignalCard';
 import { ROLE_TEXT, VERDICT_TEXT, biasText, commaNum, fmt, SEVERITY_MARK, SEVERITY_RANK, SEVERITY_TEXT, STATUS_TEXT, TONE_TEXT, plural, signed, toneOf } from '../format';
 import { navigate, pairMonthPath, pairPath } from '../router';
-import { Failure, Loading } from './common';
+import { Failure, Loading, StaleData } from './common';
 import { actionForAudience, scheduledSignals } from '../meetingPlan';
 import { MonthEvidence } from './MonthEvidence';
 import './pair-refresh.css';
@@ -19,7 +19,7 @@ export function PairView({ id, month }: { id: string; month?: number }) {
   const q = useQuery({ queryKey: ['pair', id], queryFn: () => api.pair(id) });
   const ov = useQuery({ queryKey: ['overview'], queryFn: api.overview });
   if (q.isPending) return <Loading />;
-  if (q.isError) return <Failure error={q.error} onRetry={() => q.refetch()} />;
+  if (q.isLoadingError || (month !== undefined && q.isRefetchError)) return <Failure error={q.error} onRetry={() => q.refetch()} />;
   if (month !== undefined) return <MonthEvidence detail={q.data} month={month} />;
   const { report: p, questions, comments, themes, periods, current } = q.data;
   const lowScore = q.data.low_score ?? 3;
@@ -30,6 +30,7 @@ export function PairView({ id, month }: { id: string; month?: number }) {
   const actions = (ov.data?.report.actions ?? []).filter((a) => a.pair === p.pair);
   return (
     <>
+      {q.isRefetchError && <StaleData retry={() => void q.refetch()} />}
       <button type="button" className="back-link btn btn--link" onClick={() => navigate('/')}>
         ← Все пары
       </button>

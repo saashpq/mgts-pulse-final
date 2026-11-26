@@ -3,6 +3,10 @@ import { isOffline } from '../api';
 
 export const Loading = () => <p role="status" className="sheet sheet--state">Загружаем…</p>;
 
+export const StaleData = ({ retry }: { retry: () => void }) => (
+  <p className="muted" role="status">Не удалось обновить экран. Показаны последние загруженные данные. <button type="button" className="btn btn--link" onClick={retry}>Обновить данные</button></p>
+);
+
 /** Ошибка загрузки экрана с кнопкой повтора. Если сервер недоступен — запросы повторяются и сами. */
 export const Failure = ({ error, onRetry }: { error: Error; onRetry?: () => void }) => (
   <div className="sheet sheet--state failure" role="alert">

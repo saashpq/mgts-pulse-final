@@ -1,10 +1,10 @@
 import type { QueryClient } from '@tanstack/react-query';
 
 /** Корневые ключи запросов. Инвалидация точечная: каждое действие перечитывает только то, что могло измениться. */
-export type QueryRoot = 'overview' | 'signals' | 'pair' | 'brief' | 'sources' | 'thresholds';
+export type QueryRoot = 'overview' | 'signals' | 'pair' | 'brief' | 'sources' | 'thresholds' | 'follow-ups';
 
 /** Что меняется от новых ответов и решений HR — всё, кроме порогов. */
-export const DATA_KEYS: QueryRoot[] = ['overview', 'signals', 'pair', 'brief', 'sources'];
+export const DATA_KEYS: QueryRoot[] = ['overview', 'signals', 'pair', 'brief', 'sources', 'follow-ups'];
 /** Решение HR по сигналу. */
 export const VERDICT_KEYS: QueryRoot[] = ['overview', 'signals', 'pair', 'brief'];
 /** Сохранение порогов: пересчитываются сигналы и сами пороги. */

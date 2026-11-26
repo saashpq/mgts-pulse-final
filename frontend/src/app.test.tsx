@@ -127,6 +127,7 @@ beforeEach(() => {
   vi.stubGlobal('fetch', vi.fn(async (url: string, init?: RequestInit) => {
     calls.push({ url, init });
     const body = url.includes('/brief') ? brief : url.includes('/thresholds') ? (init?.method === 'PUT' ? { thresholds: JSON.parse(String(init.body)) } : thresholds)
+      : url.includes('/follow-ups') ? { today: '2026-11-26', items: [] }
       : url.includes('/overview') ? overview : url.includes('/form/') && init?.method === 'POST' ? { ok: true, period: 6 } : url.includes('/form/') ? form
       : url.includes('/verdict') ? { status: 'confirmed', at: 'now' } : url.includes('/signals') ? (url.includes('view=all') ? { view: 'all', signals: signalsList, current: 6 } : { view: 'grouped', signals: groupedList, current: 6 })
       : url.includes('/pairs/') ? pairDetail : url.includes('/sources') ? sources : {};
@@ -303,6 +304,8 @@ test('анкета: отправка после ответа на шкалы', a
   window.history.pushState(null, '', '/form/tok');
   wrap(<App />);
   const send = await screen.findByRole('button', { name: 'Отправить' });
+  const audience = screen.getByText(/HR видит вашу роль и пару и может определить/);
+  expect(audience.compareDocumentPosition(screen.getByText('Как проходит стажировка?')) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
   expect(send).toBeDisabled();
   await userEvent.click(screen.getByLabelText('4'));
   await userEvent.type(screen.getByRole('textbox'), 'Всё хорошо');

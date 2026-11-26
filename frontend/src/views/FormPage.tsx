@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { api, ApiError, isStaticDemo, type FormInfo } from '../api';
 
+const audienceNotice = 'Ответы и комментарии доступны HR программы стажировок. HR видит вашу роль и пару и может определить, кто ответил.';
+
 // Public examples of the standard questionnaire in data/survey.json.
 const examples = {
   intern: {
@@ -55,6 +57,7 @@ function StaticFormExample({ example }: { example: typeof examples.intern }) {
       <article className="form-card">
         <p className="muted">Ежемесячный опрос МГТС · Пример для просмотра</p>
         <h1>{example.title}</h1>
+        <p>{audienceNotice}</p>
         <p>В персональной анкете участник ставит четыре оценки за месяц и по желанию оставляет комментарий. Здесь можно только прочитать вопросы.</p>
         <h2>Обязательные оценки</h2>
         <p className="muted">Шкала от 1 до 5. Чем выше оценка, тем лучше участник оценивает ситуацию.</p>
@@ -137,6 +140,7 @@ function OpenForm({ token, f, reload }: { token: string; f: FormInfo; reload: ()
       >
         <p className="muted">{f.role === 'intern' ? 'Анкета стажёра' : 'Анкета наставника'} · месяц {f.period} из {f.periods}</p>
         <h1>{f.title}</h1>
+        <p>{audienceNotice}</p>
         {scales.length > 0 && <div className="form-progress">
           <label htmlFor="scale-progress">Обязательные оценки · {completed} из {scales.length}</label>
           <progress id="scale-progress" value={completed} max={scales.length} />
@@ -166,7 +170,6 @@ function OpenForm({ token, f, reload }: { token: string; f: FormInfo; reload: ()
               <textarea rows={4} maxLength={2000} value={(answers[x.code] as string) ?? ''} onChange={(e) => setAnswers({ ...answers, [x.code]: e.target.value })} />
             </label>
           ))}
-        <p className="muted">Ответы видит HR программы стажировок. В аналитике используется ваш ID участника, а не имя.</p>
         <button className="btn btn--primary" disabled={!ready || send.isPending}>
           {send.isPending ? 'Отправляем…' : 'Отправить'}
         </button>

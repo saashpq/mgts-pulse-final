@@ -289,6 +289,8 @@ func (a *App) Handler() http.Handler {
 		a.Metrics.Write(w)
 	})
 	mux.HandleFunc("GET /api/v1/overview", a.overview)
+	mux.HandleFunc("GET /api/v1/follow-ups", a.followUpQueue)
+	mux.HandleFunc("PUT /api/v1/follow-ups/{signal}/{episode}", a.putFollowUp)
 	mux.HandleFunc("GET /api/v1/pairs/{id}", a.pair)
 	mux.HandleFunc("GET /api/v1/pairs/{id}/brief", a.brief)
 	mux.HandleFunc("GET /api/v1/signals", a.signalList)

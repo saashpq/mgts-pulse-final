@@ -40,6 +40,7 @@ export interface Signal {
   due_days: number;
   evidence: Evidence[];
   first_seen: number;
+  episode?: number;
   verdict?: Verdict;
   /** главный сигнал пары: остальные активные сигналы её подтверждают */
   primary?: boolean;
@@ -50,6 +51,27 @@ export interface Signal {
   /** срок реакции прошёл, решения HR нет */
   overdue?: boolean;
 }
+
+export type Delivery = 'done' | 'partial' | 'not_done' | 'unknown';
+export type ContactOutcome = 'done' | 'partial' | 'no_change' | 'unknown';
+export interface FollowUp {
+  signal_id: string;
+  episode: number;
+  pair: string;
+  title: string;
+  owner: string;
+  agreed_action: string;
+  due_date: string;
+  status: 'open' | 'closed';
+  timing: 'overdue' | 'today' | 'upcoming' | 'closed';
+  revision: number;
+  checks: {at: string; due_date: string; owner: string; agreed_action: string; delivery: Delivery; outcome: ContactOutcome; note: string}[];
+  reschedules?: {at: string; due_date: string; next_due_date: string}[];
+}
+export interface FollowUpQueueData { today: string; items: FollowUp[] }
+export type FollowUpCommand =
+  | {operation: 'plan'; revision: number; agreed_action: string; owner: string; due_date: string}
+  | {operation: 'check'; revision: number; delivery: Delivery; outcome: ContactOutcome; note: string; next_due_date?: string};
 
 export interface PairReport {
   response_ids?: Record<'intern' | 'mentor', string[]>;
@@ -576,6 +598,20 @@ const json = (method: string, body: unknown): RequestInit => ({
 
 export const api = {
   overview: () => request<Overview>('/api/v1/overview'),
+  followUps: async (): Promise<FollowUpQueueData> => {
+    if (!isStaticDemo()) return request('/api/v1/follow-ups');
+    // Illustrate the workflow using an existing synthetic signal and a fixed showcase date.
+    const overview = await staticRequest<Overview>('/api/v1/overview');
+    const signal = overview.report.pairs.flatMap(pair => pair.signals)[0];
+    const today = '2026-11-26';
+    return { today, items: signal ? [{
+      signal_id: signal.id, episode: signal.episode ?? signal.first_seen, pair: signal.pair,
+      title: signal.title, agreed_action: 'Стажёр и наставник сверят ожидания по следующей задаче.',
+      owner: 'HR', due_date: today, status: 'open', timing: 'today', revision: 1, checks: [],
+    }] : [] };
+  },
+  updateFollowUp: (signal: string, episode: number, command: FollowUpCommand) =>
+    request<FollowUp>('/api/v1/follow-ups/' + encodeURIComponent(signal) + '/' + episode, json('PUT', command)),
   pair: (id: string) => request<PairDetail>(`/api/v1/pairs/${encodeURIComponent(id)}`),
   brief: (id: string) => request<Brief>(`/api/v1/pairs/${encodeURIComponent(id)}/brief`),
   signals: (view: SignalsView = 'grouped', state = '', severity = '') =>

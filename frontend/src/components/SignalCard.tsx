@@ -2,6 +2,7 @@ import { useId, useRef, useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { MIN_DECISIONS, api, isStaticDemo, type Signal, type SignalPrecision } from '../api';
 import { VERDICT_KEYS, invalidate } from '../queries';
+import { SignalFollowUp } from './FollowUps';
 import { ROLE_TEXT, analyzerText, commaNum, SEVERITY_MARK, SEVERITY_TEXT, SOURCE_HINT, SOURCE_TEXT, VERDICT_TEXT, reactionDeadline, fmt, ratioCI } from '../format';
 
 /** Подсказки для поля «что сделано»: последняя — «другое», ставит фокус в поле. */
@@ -206,6 +207,7 @@ export function SignalCard({
         {m.isError && <p className="error" role="alert">{(m.error as Error).message}</p>}
         </>}
       </div>
+      <SignalFollowUp key={s.id + '/' + (s.episode ?? s.first_seen)} signal={s} active={active} />
     </article>
   );
 }

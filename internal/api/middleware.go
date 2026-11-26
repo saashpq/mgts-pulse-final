@@ -52,7 +52,7 @@ func Recover(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		defer func() {
 			if v := recover(); v != nil {
-				slog.Error("panic", "path", r.URL.Path, "err", v)
+				slog.Error("panic", "route", routeOf(r.URL.Path), "err", v)
 				writeError(w, 500, "internal", "внутренняя ошибка")
 			}
 		}()
@@ -175,7 +175,10 @@ func Observe(m *metrics.Registry) func(http.Handler) http.Handler {
 
 // routeOf — путь без идентификаторов, чтобы метрики не разрастались по числу пар и токенов.
 func routeOf(p string) string {
-	for _, prefix := range []string{"/api/v1/pairs/", "/api/v1/form/", "/api/v1/signals/"} {
+	if strings.HasPrefix(p, "/api/v1/follow-ups/") {
+		return "/api/v1/follow-ups/{signal}/{episode}"
+	}
+	for _, prefix := range []string{"/api/v1/pairs/", "/api/v1/form/", "/api/v1/signals/", "/form/", "/pairs/"} {
 		if strings.HasPrefix(p, prefix) {
 			rest := strings.TrimPrefix(p, prefix)
 			if i := strings.IndexByte(rest, '/'); i >= 0 {

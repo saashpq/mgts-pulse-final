@@ -1,0 +1,79 @@
+name: pulse
+on:
+  workflow_dispatch:
+  push:
+    paths-ignore: ["downloads/prototype.zip"]
+  pull_request:
+    paths-ignore: ["downloads/prototype.zip"]
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: .
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+      - uses: actions/setup-go@v6
+        with:
+          go-version-file: go.mod
+          cache: false
+      - run: test -z "$(gofmt -l .)"
+      - run: go vet ./...
+      - run: go test ./...
+      - run: go build ./cmd/server ./forms
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+      - run: python -m unittest discover -s eval/followups -p 'test_*.py' -v
+
+  frontend:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+      - run: npm ci
+      - run: npm test
+      - run: npm run build
+
+  windows-demo:
+    needs: [test, frontend]
+    runs-on: windows-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+      - uses: actions/setup-go@v6
+        with:
+          go-version-file: go.mod
+          cache: false
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+      - name: Package the synthetic Windows demonstration
+        shell: pwsh
+        run: ./scripts/package-demo.ps1 -OutputPath "$env:RUNNER_TEMP/pulse-windows-demo.zip"
+      - uses: actions/upload-artifact@v7
+        with:
+          path: ${{ runner.temp }}/pulse-windows-demo.zip
+          archive: false
+          if-no-files-found: error
+          retention-days: 14

@@ -435,3 +435,26 @@ func TestRecoverAndRoute(t *testing.T) {
 		t.Fatal("cors")
 	}
 }
+
+func TestMetricsHideContactAndParticipantIdentifiers(t *testing.T) {
+	_, h := newApp(t, nil)
+	privatePath := "/api/v1/follow-ups/person-a-signal/427"
+	do(h, "PUT", privatePath, "{}")
+	do(h, "GET", "/form/private-participant-token", "")
+	do(h, "GET", "/pairs/private-pair/months/2", "")
+	w := do(h, "GET", "/metrics", "")
+	body := w.Body.String()
+	if w.Code != 200 {
+		t.Fatal(w.Code)
+	}
+	for _, private := range []string{"person-a-signal", "/427", "private-participant-token", "private-pair"} {
+		if strings.Contains(body, private) {
+			t.Errorf("public metrics contain private value %q", private)
+		}
+	}
+	for _, route := range []string{"/api/v1/follow-ups/{signal}/{episode}", "/form/{id}", "/pairs/{id}/months/2"} {
+		if !strings.Contains(body, route) {
+			t.Errorf("missing anonymized route %q", route)
+		}
+	}
+}
