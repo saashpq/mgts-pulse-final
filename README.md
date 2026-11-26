@@ -4,7 +4,9 @@
 
 [Скачать готовый прототип Windows](downloads/prototype.zip?raw=1) · [Инструкция эксперта](GUIDE.md)
 
-[Финальная презентация со встроенным видео](downloads/MGTS-Pulse-Jury-Final.pptx?raw=1) · [Слайды в PDF](downloads/MGTS-Pulse-Jury-Final.pdf)
+[Экранная презентация финала · 7 слайдов и 2 видео](downloads/MGTS-Pulse-Screen-Tour.pptx?raw=1)
+
+[Презентация с разбором метода](downloads/MGTS-Pulse-Jury-Final.pptx?raw=1) · [Разбор метода в PDF](downloads/MGTS-Pulse-Jury-Final.pdf)
 
 Для показа распакуйте ZIP и запустите `show-forms.bat`. [Сценарий проверки и результаты запуска](docs/DEMO-CHECK.md)
 
