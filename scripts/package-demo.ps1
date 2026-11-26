@@ -98,6 +98,8 @@ try {
     foreach ($name in $previous.Keys) { [Environment]::SetEnvironmentVariable($name, $previous[$name]) }
     $cleanup = (Get-Item -LiteralPath $build).FullName
     if ((Split-Path -Parent $cleanup) -eq $tempRoot -and (Split-Path -Leaf $cleanup) -eq $buildName) {
-        Remove-Item -LiteralPath $cleanup -Recurse -Force
+        # npm can create paths longer than the Windows PowerShell 5.1 provider accepts.
+        $longPath = if ($cleanup.StartsWith('\\')) { '\\?\UNC\' + $cleanup.Substring(2) } else { '\\?\' + $cleanup }
+        [IO.Directory]::Delete($longPath, $true)
     }
 }

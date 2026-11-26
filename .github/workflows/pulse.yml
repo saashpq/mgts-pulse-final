@@ -23,7 +23,12 @@ jobs:
         with:
           go-version-file: go.mod
           cache: false
-      - run: test -z "$(gofmt -l .)"
+      - name: Check Go formatting
+        shell: bash
+        run: |
+          while IFS= read -r -d '' file; do
+            diff -u --strip-trailing-cr "$file" <(gofmt "$file") || exit 1
+          done < <(git ls-files -z -- '*.go')
       - run: go vet ./...
       - run: go test ./...
       - run: go build ./cmd/server ./forms
