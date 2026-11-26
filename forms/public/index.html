@@ -1,3 +1,55 @@
-<!doctype html><html lang="ru"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>МГТС · Обратная связь</title><link rel="stylesheet" href="/survey.css"><style>
-body{margin:0;color:#0b2542;font:16px system-ui;background:#eef5fd}header{background:#09376b;color:white;padding:18px max(5vw,24px);font-size:18px;font-weight:650}main{max-width:850px;margin:32px auto;padding:0 16px}nav{display:flex;gap:14px;flex-wrap:wrap}nav a,button{border:0;border-radius:9px;background:#0757ad;color:white;padding:14px 20px;text-decoration:none;cursor:pointer}#status{line-height:1.6}#status:empty{display:none}.sd-root-modern{--sjs-primary-backcolor:#0757ad;--sjs-font-family:system-ui}
-</style><header>МГТС · Молодёжные программы</header><main><section id="home"><h1>Ежемесячная обратная связь</h1><p>Выберите свою анкету.</p><nav><a href="/intern">Анкета стажёра</a><a href="/mentor">Анкета наставника</a></nav></section><div id="form"></div><p id="status" role="status"></p></main><script src="/core.js"></script><script src="/ui.js"></script><script src="/ru.js"></script><script src="/app.js"></script></html>
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Обратная связь по стажировке · МГТС</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="/survey.css">
+  <style>
+    :root { color-scheme: light; font: 100%/1.5 system-ui, 'Segoe UI', sans-serif; color: #132e4b; background: #eff5fc; }
+    body { margin: 0; }
+    .masthead { background: #083666; color: white; }
+    .masthead a { display: inline-flex; align-items: center; gap: 14px; min-height: 64px; color: inherit; text-decoration: none; }
+    .masthead strong { font-size: 1.4rem; letter-spacing: .015em; }
+    .masthead span { padding-left: 14px; border-left: 1px solid #809db9; font-size: .9rem; }
+    .masthead-inner, main { width: min(100% - 40px, 920px); margin-inline: auto; }
+    main { padding-block: clamp(20px, 5vw, 60px); }
+    #home { max-width: 780px; }
+    h1 { margin: 0; max-width: 22ch; line-height: 1.08; font-size: clamp(2rem, 5vw, 3.65rem); letter-spacing: -.045em; }
+    .intro { margin: 16px 0 28px; max-width: 62ch; color: #385574; }
+    nav { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)); gap: 16px; }
+    .role { position: relative; display: grid; gap: 8px; padding: 22px 44px 22px 22px; border: 1px solid #afc5db; border-radius: 16px; background: white; color: #073e78; text-decoration: none; }
+    .role strong { font-size: 1.25rem; }
+    .role span { color: #405a73; }
+    .role::after { content: '→'; position: absolute; right: 17px; top: 18px; font-size: 1.5rem; }
+    .role:hover { background: #f6faff; border-color: #0757ad; }
+    .masthead a:focus-visible, .role:focus-visible { outline: 3px solid #096bd1; outline-offset: 3px; }
+    .masthead a:focus-visible { outline-color: white; outline-offset: -3px; }
+    #status:not(:empty) { color: #0c365a; padding: 18px; border-left: 4px solid #126aba; background: white; border-radius: 4px; }
+    .form-note { margin: 0 0 16px; max-width: 74ch; color: #385574; }
+    #form .sd-dropdown__input-prefix-wrapper { pointer-events: none; }
+    :root, #form .sd-root-modern {
+      --sjs2-color-project-brand-600: #0757ad;
+      --sjs2-color-utility-body: #eff5fc;
+      --sjs2-typography-font-family-text: system-ui, 'Segoe UI', sans-serif;
+    }
+    @media (max-width: 540px) { .masthead-inner, main { width: min(100% - 24px, 920px); } main { padding-block: 24px; } }
+  </style>
+</head>
+<body>
+  <header class="masthead"><div class="masthead-inner"><a href="/" aria-label="МГТС. Выбор анкеты"><strong>МГТС</strong><span>Молодёжные программы</span></a></div></header>
+  <main>
+    <section id="home">
+      <h1>Обратная связь по стажировке</h1>
+      <p class="intro">Выберите свою роль, чтобы рассказать, как прошёл месяц.</p>
+      <nav aria-label="Выбор анкеты">
+        <a class="role" href="/intern" aria-labelledby="intern-title"><strong id="intern-title">Анкета стажёра</strong><span>Задачи, поддержка и развитие</span></a>
+        <a class="role" href="/mentor" aria-labelledby="mentor-title"><strong id="mentor-title">Анкета наставника</strong><span>Прогресс стажёра и совместная работа</span></a>
+      </nav>
+    </section>
+    <div id="form"></div><p id="status" role="status"></p>
+  </main>
+  <script src="/core.js"></script><script src="/ui.js"></script><script src="/ru.js"></script><script src="/app.js"></script>
+</body>
+</html>

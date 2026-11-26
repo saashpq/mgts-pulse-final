@@ -1,1 +1,181 @@
-{"title": "Учебная анкета · наставник", "completeText": "Отправить анкету", "showQuestionNumbers": "off", "elements": [{"name": "mentor_id", "type": "dropdown", "title": "Код наставника", "choices": ["DEMO-M1", "DEMO-M2", "DEMO-M3", "DEMO-M4", "DEMO-M5"], "isRequired": true}, {"name": "intern_id", "type": "dropdown", "title": "Код стажёра", "choices": ["DEMO-I1", "DEMO-I2", "DEMO-I3", "DEMO-I4", "DEMO-I5"], "isRequired": true}, {"name": "track", "type": "dropdown", "title": "Учебная группа", "choices": ["Учебная группа 1", "Учебная группа 2", "Учебная группа 3", "Учебная группа 4", "Учебная группа 5"], "isRequired": true}, {"name": "period", "type": "dropdown", "title": "Контрольный период", "choices": [{"value": 1, "text": "Месяц 1"}, {"value": 2, "text": "Месяц 2"}, {"value": 3, "text": "Месяц 3"}, {"value": 4, "text": "Месяц 4"}, {"value": 5, "text": "Месяц 5"}, {"value": 6, "text": "Месяц 6"}], "isRequired": true}, {"name": "m_understanding", "title": "Участник понимает ожидаемый результат", "type": "radiogroup", "choices": [1, 2, 3, 4, 5], "colCount": 5, "isRequired": true}, {"name": "m_quality", "title": "Результат соответствует договорённостям", "type": "radiogroup", "choices": [1, 2, 3, 4, 5], "colCount": 5, "isRequired": true}, {"name": "m_autonomy", "title": "Участник справляется самостоятельно", "type": "radiogroup", "choices": [1, 2, 3, 4, 5], "colCount": 5, "isRequired": true}, {"name": "m_speed", "title": "Участник укладывается в сроки", "type": "radiogroup", "choices": [1, 2, 3, 4, 5], "colCount": 5, "isRequired": true}, {"name": "m_initiative", "title": "Участник предлагает следующие шаги", "type": "radiogroup", "choices": [1, 2, 3, 4, 5], "colCount": 5, "isRequired": true}, {"name": "m_team", "title": "Участник взаимодействует с коллегами", "type": "radiogroup", "choices": [1, 2, 3, 4, 5], "colCount": 5, "isRequired": true}, {"name": "m_comment", "title": "Что произошло за месяц?", "type": "comment", "maxLength": 2000}, {"name": "m_barrier", "title": "Что стоит обсудить с куратором?", "type": "comment", "maxLength": 2000}]}
+{
+  "title": "Учебная анкета · наставник",
+  "completeText": "Отправить анкету",
+  "showQuestionNumbers": "off",
+  "elements": [
+    {
+      "name": "mentor_id",
+      "type": "dropdown",
+      "title": "Код наставника",
+      "choices": [
+        "DEMO-M1",
+        "DEMO-M2",
+        "DEMO-M3",
+        "DEMO-M4",
+        "DEMO-M5"
+      ],
+      "isRequired": true
+    },
+    {
+      "name": "intern_id",
+      "type": "dropdown",
+      "title": "Код стажёра",
+      "choices": [
+        "DEMO-I1",
+        "DEMO-I2",
+        "DEMO-I3",
+        "DEMO-I4",
+        "DEMO-I5"
+      ],
+      "isRequired": true
+    },
+    {
+      "name": "track",
+      "type": "dropdown",
+      "title": "Учебная группа",
+      "choices": [
+        "Учебная группа 1",
+        "Учебная группа 2",
+        "Учебная группа 3",
+        "Учебная группа 4",
+        "Учебная группа 5"
+      ],
+      "isRequired": true
+    },
+    {
+      "name": "period",
+      "type": "dropdown",
+      "title": "Контрольный период",
+      "choices": [
+        {
+          "value": 1,
+          "text": "Месяц 1"
+        },
+        {
+          "value": 2,
+          "text": "Месяц 2"
+        },
+        {
+          "value": 3,
+          "text": "Месяц 3"
+        },
+        {
+          "value": 4,
+          "text": "Месяц 4"
+        },
+        {
+          "value": 5,
+          "text": "Месяц 5"
+        },
+        {
+          "value": 6,
+          "text": "Месяц 6"
+        }
+      ],
+      "isRequired": true
+    },
+    {
+      "name": "m_understanding",
+      "title": "Участник понимает ожидаемый результат",
+      "type": "radiogroup",
+      "choices": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "colCount": 5,
+      "isRequired": true,
+      "description": "1 — требуется разобрать цель вместе; 3 — уточняет отдельные условия; 5 — сам объясняет, как проверить результат."
+    },
+    {
+      "name": "m_quality",
+      "title": "Результат соответствует договорённостям",
+      "type": "radiogroup",
+      "choices": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "colCount": 5,
+      "isRequired": true,
+      "description": "1 — нужна существенная доработка; 3 — остаются отдельные правки; 5 — работу можно принять с первого раза."
+    },
+    {
+      "name": "m_autonomy",
+      "title": "Участник справляется самостоятельно",
+      "type": "radiogroup",
+      "choices": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "colCount": 5,
+      "isRequired": true,
+      "description": "1 — нужна помощь на каждом этапе; 3 — справляется с типовыми шагами; 5 — самостоятельно ведёт задачу до результата."
+    },
+    {
+      "name": "m_speed",
+      "title": "Участник укладывается в сроки",
+      "type": "radiogroup",
+      "choices": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "colCount": 5,
+      "isRequired": true,
+      "description": "1 — сроки регулярно срываются; 3 — отдельные задержки приходится обсуждать; 5 — сдаёт вовремя или заранее согласует перенос."
+    },
+    {
+      "name": "m_initiative",
+      "title": "Участник предлагает следующие шаги",
+      "type": "radiogroup",
+      "choices": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "colCount": 5,
+      "isRequired": true,
+      "description": "1 — ждёт указаний; 3 — предлагает шаг после обсуждения; 5 — сам предлагает обоснованный следующий шаг."
+    },
+    {
+      "name": "m_team",
+      "title": "Участник взаимодействует с коллегами",
+      "type": "radiogroup",
+      "choices": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "colCount": 5,
+      "isRequired": true,
+      "description": "1 — блокеры остаются невысказанными; 3 — взаимодействует при поддержке; 5 — сам вовремя подключает нужных коллег."
+    },
+    {
+      "name": "m_comment",
+      "title": "Что произошло за месяц?",
+      "type": "comment",
+      "maxLength": 2000
+    },
+    {
+      "name": "m_barrier",
+      "title": "Что стоит обсудить с куратором?",
+      "type": "comment",
+      "maxLength": 2000
+    }
+  ],
+  "description": "Оцените именно этот месяц. 2 и 4 — промежуточные оценки между соседними описаниями."
+}

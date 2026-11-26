@@ -2,6 +2,7 @@ package signals
 
 import (
 	"math"
+	"strings"
 	"testing"
 
 	"github.com/ElzaraA/mgts-ai/internal/survey"
@@ -24,6 +25,31 @@ func TestItemDropUsesThePreviousMonthAndResolvesOnRecovery(t *testing.T) {
 			t.Errorf("%v: got (%d,%d)", tc.values, base, onset)
 		}
 	}
+}
+
+func TestItemDropEvidenceIncludesTriggerAfterPartialRecovery(t *testing.T) {
+	in := synthInput()
+	view := Build(in)["P1"]
+	code := "i_clarity"
+	values := []float64{5, 3, 4}
+	copy(view.Questions[code], values)
+	for _, sig := range Detect(view, in, len(values)) {
+		if sig.Type != "S16" || len(sig.Evidence) == 0 || sig.Evidence[0].Question != code {
+			continue
+		}
+		if sig.FirstPeriod != 2 || sig.LastPeriod != 3 || len(sig.Evidence) != len(values) ||
+			!strings.Contains(sig.Explanation, "5 в M1 → 3 в M2 → 4 в M3") {
+			t.Fatalf("lost triggering observation: %+v", sig)
+		}
+		for month, ev := range sig.Evidence {
+			if ev.Period != month+1 || ev.Value != values[month] || ev.Question != code ||
+				ev.Role != "intern" || ev.ResponseID == "" || ev.ResponseID != view.ResponseIDs["intern"][month] {
+				t.Fatalf("incorrect source for M%d: %+v", month+1, ev)
+			}
+		}
+		return
+	}
+	t.Fatal("expected the active decline after the partial recovery")
 }
 
 func TestAgreementIgnoresUnmatchedAutonomyScore(t *testing.T) {

@@ -605,9 +605,14 @@ func Detect(v *PairView, in Input, cutoff int) []Signal {
 		}
 		last := len(values) - 1
 		role := string(q.Role)
+		var observations []string
+		var evidence []Evidence
+		for month := base; month <= last; month++ {
+			observations = append(observations, fmt.Sprintf("%g в M%d", values[month], month+1))
+			evidence = append(evidence, ref(role, month, q.Code, values[month]))
+		}
 		add("S16", Medium, "rules", onset+1, last+1,
-			fmt.Sprintf("«%s»: %s в M%d → %s в M%d. Порог снижения — %s балла.", q.Text, Num(values[base]), base+1, Num(values[last]), last+1, Num(t.ItemDrop)),
-			[]Evidence{ref(role, base, q.Code, values[base]), ref(role, last, q.Code, values[last])})
+			fmt.Sprintf("«%s»: %s. Порог снижения (%g) достигнут в M%d.", q.Text, strings.Join(observations, " → "), t.ItemDrop, onset+1), evidence)
 		out[len(out)-1].ID += "-" + q.Code
 	}
 
