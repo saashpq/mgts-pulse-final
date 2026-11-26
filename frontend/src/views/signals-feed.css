@@ -1,0 +1,74 @@
+.signals-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: start;
+  gap: 16px 26px;
+  padding: 16px 20px;
+  margin-bottom: 16px;
+  border: 1px solid var(--rule);
+  border-radius: var(--r-md);
+  background: var(--sheet);
+}
+
+.signals-toolbar__field {
+  display: grid;
+  gap: 7px;
+  min-width: 0;
+}
+
+.signals-toolbar .filter {
+  min-height: 36px;
+}
+
+.signals-results {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 8px;
+  color: var(--ink-3);
+  font-size: 14px;
+}
+
+.signals-results strong,
+.signals-empty h2 {
+  color: var(--ink);
+}
+
+.signals-reset {
+  border: none;
+  background: transparent;
+  color: var(--brand);
+  cursor: pointer;
+  padding: 6px 2px;
+  font: inherit;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.signals-empty {
+  padding: clamp(20px, 4vw, 40px);
+  border: 1px solid var(--rule);
+  border-radius: var(--r-md);
+  background: var(--sheet);
+}
+
+.signals-empty h2 {
+  margin: 0;
+  font-size: 20px;
+}
+
+.signals-empty p {
+  margin: 8px 0;
+  color: var(--ink-3);
+}
+
+@media (max-width: 620px) {
+  .signals-toolbar {
+    display: grid;
+    padding: 14px;
+  }
+  .signals-toolbar .filter {
+    min-height: 40px;
+  }
+}

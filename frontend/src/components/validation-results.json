@@ -1,0 +1,428 @@
+{
+  "challenge48": {
+    "run-3b": {
+      "n": 48,
+      "production": {
+        "attrition": {
+          "tp": 7,
+          "fp": 1,
+          "fn": 11,
+          "tn": 29
+        },
+        "conflict": {
+          "tp": 14,
+          "fp": 1,
+          "fn": 4,
+          "tn": 29
+        }
+      },
+      "model_alone": {
+        "attrition": {
+          "tp": 7,
+          "fp": 0,
+          "fn": 11,
+          "tn": 30
+        },
+        "conflict": {
+          "tp": 14,
+          "fp": 0,
+          "fn": 4,
+          "tn": 30
+        }
+      },
+      "fallback": 0
+    },
+    "run-7b-v3": {
+      "n": 48,
+      "production": {
+        "attrition": {
+          "tp": 18,
+          "fp": 8,
+          "fn": 0,
+          "tn": 22
+        },
+        "conflict": {
+          "tp": 18,
+          "fp": 3,
+          "fn": 0,
+          "tn": 27
+        }
+      },
+      "model_alone": {
+        "attrition": {
+          "tp": 18,
+          "fp": 7,
+          "fn": 0,
+          "tn": 23
+        },
+        "conflict": {
+          "tp": 18,
+          "fp": 2,
+          "fn": 0,
+          "tn": 28
+        }
+      },
+      "fallback": 0
+    },
+    "run-7b": {
+      "n": 48,
+      "production": {
+        "attrition": {
+          "tp": 17,
+          "fp": 6,
+          "fn": 1,
+          "tn": 24
+        },
+        "conflict": {
+          "tp": 17,
+          "fp": 4,
+          "fn": 1,
+          "tn": 26
+        }
+      },
+      "model_alone": {
+        "attrition": {
+          "tp": 17,
+          "fp": 6,
+          "fn": 1,
+          "tn": 24
+        },
+        "conflict": {
+          "tp": 17,
+          "fp": 4,
+          "fn": 1,
+          "tn": 26
+        }
+      },
+      "fallback": 0
+    },
+    "run-final": {
+      "n": 48,
+      "production": {
+        "attrition": {
+          "tp": 18,
+          "fp": 7,
+          "fn": 0,
+          "tn": 23
+        },
+        "conflict": {
+          "tp": 18,
+          "fp": 2,
+          "fn": 0,
+          "tn": 28
+        }
+      },
+      "model_alone": {
+        "attrition": {
+          "tp": 18,
+          "fp": 7,
+          "fn": 0,
+          "tn": 23
+        },
+        "conflict": {
+          "tp": 18,
+          "fp": 2,
+          "fn": 0,
+          "tn": 28
+        }
+      },
+      "fallback": 0
+    },
+    "run-offline-final": {
+      "n": 48,
+      "production": {
+        "attrition": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 18,
+          "tn": 30
+        },
+        "conflict": {
+          "tp": 1,
+          "fp": 0,
+          "fn": 17,
+          "tn": 30
+        }
+      }
+    },
+    "run-offline": {
+      "n": 48,
+      "production": {
+        "attrition": {
+          "tp": 0,
+          "fp": 1,
+          "fn": 18,
+          "tn": 29
+        },
+        "conflict": {
+          "tp": 1,
+          "fp": 1,
+          "fn": 17,
+          "tn": 29
+        }
+      }
+    }
+  },
+  "confirm16": {
+    "run-3b": {
+      "n": 16,
+      "production": {
+        "attrition": {
+          "tp": 3,
+          "fp": 1,
+          "fn": 3,
+          "tn": 9
+        },
+        "conflict": {
+          "tp": 5,
+          "fp": 1,
+          "fn": 1,
+          "tn": 9
+        }
+      },
+      "model_alone": {
+        "attrition": {
+          "tp": 3,
+          "fp": 0,
+          "fn": 3,
+          "tn": 10
+        },
+        "conflict": {
+          "tp": 5,
+          "fp": 1,
+          "fn": 1,
+          "tn": 9
+        }
+      },
+      "fallback": 0
+    },
+    "run-7b-v3": {
+      "n": 16,
+      "production": {
+        "attrition": {
+          "tp": 6,
+          "fp": 4,
+          "fn": 0,
+          "tn": 6
+        },
+        "conflict": {
+          "tp": 6,
+          "fp": 1,
+          "fn": 0,
+          "tn": 9
+        }
+      },
+      "model_alone": {
+        "attrition": {
+          "tp": 6,
+          "fp": 4,
+          "fn": 0,
+          "tn": 6
+        },
+        "conflict": {
+          "tp": 6,
+          "fp": 1,
+          "fn": 0,
+          "tn": 9
+        }
+      },
+      "fallback": 0
+    },
+    "run-7b": {
+      "n": 16,
+      "production": {
+        "attrition": {
+          "tp": 6,
+          "fp": 3,
+          "fn": 0,
+          "tn": 7
+        },
+        "conflict": {
+          "tp": 6,
+          "fp": 1,
+          "fn": 0,
+          "tn": 9
+        }
+      },
+      "model_alone": {
+        "attrition": {
+          "tp": 6,
+          "fp": 3,
+          "fn": 0,
+          "tn": 7
+        },
+        "conflict": {
+          "tp": 6,
+          "fp": 1,
+          "fn": 0,
+          "tn": 9
+        }
+      },
+      "fallback": 0
+    },
+    "run-final": {
+      "n": 16,
+      "production": {
+        "attrition": {
+          "tp": 6,
+          "fp": 4,
+          "fn": 0,
+          "tn": 6
+        },
+        "conflict": {
+          "tp": 6,
+          "fp": 1,
+          "fn": 0,
+          "tn": 9
+        }
+      },
+      "model_alone": {
+        "attrition": {
+          "tp": 6,
+          "fp": 4,
+          "fn": 0,
+          "tn": 6
+        },
+        "conflict": {
+          "tp": 6,
+          "fp": 1,
+          "fn": 0,
+          "tn": 9
+        }
+      },
+      "fallback": 0
+    },
+    "run-offline-final": {
+      "n": 16,
+      "production": {
+        "attrition": {
+          "tp": 1,
+          "fp": 0,
+          "fn": 5,
+          "tn": 10
+        },
+        "conflict": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 6,
+          "tn": 10
+        }
+      }
+    }
+  },
+  "unseen32": {
+    "run-7b-v3": {
+      "n": 32,
+      "production": {
+        "attrition": {
+          "tp": 12,
+          "fp": 4,
+          "fn": 0,
+          "tn": 16
+        },
+        "conflict": {
+          "tp": 11,
+          "fp": 0,
+          "fn": 1,
+          "tn": 20
+        }
+      },
+      "model_alone": {
+        "attrition": {
+          "tp": 12,
+          "fp": 4,
+          "fn": 0,
+          "tn": 16
+        },
+        "conflict": {
+          "tp": 11,
+          "fp": 0,
+          "fn": 1,
+          "tn": 20
+        }
+      },
+      "fallback": 0
+    },
+    "run-7b": {
+      "n": 32,
+      "production": {
+        "attrition": {
+          "tp": 12,
+          "fp": 2,
+          "fn": 0,
+          "tn": 18
+        },
+        "conflict": {
+          "tp": 8,
+          "fp": 3,
+          "fn": 4,
+          "tn": 17
+        }
+      },
+      "model_alone": {
+        "attrition": {
+          "tp": 12,
+          "fp": 2,
+          "fn": 0,
+          "tn": 18
+        },
+        "conflict": {
+          "tp": 8,
+          "fp": 3,
+          "fn": 4,
+          "tn": 17
+        }
+      },
+      "fallback": 0
+    },
+    "run-final": {
+      "n": 32,
+      "production": {
+        "attrition": {
+          "tp": 11,
+          "fp": 4,
+          "fn": 1,
+          "tn": 16
+        },
+        "conflict": {
+          "tp": 11,
+          "fp": 0,
+          "fn": 1,
+          "tn": 20
+        }
+      },
+      "model_alone": {
+        "attrition": {
+          "tp": 11,
+          "fp": 4,
+          "fn": 1,
+          "tn": 16
+        },
+        "conflict": {
+          "tp": 11,
+          "fp": 0,
+          "fn": 1,
+          "tn": 20
+        }
+      },
+      "fallback": 0
+    },
+    "run-offline-final": {
+      "n": 32,
+      "production": {
+        "attrition": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 12,
+          "tn": 20
+        },
+        "conflict": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 12,
+          "tn": 20
+        }
+      }
+    }
+  }
+}

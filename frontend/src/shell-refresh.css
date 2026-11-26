@@ -1,0 +1,74 @@
+.pulse-shell.app {
+  background: #eef5fb;
+  padding: clamp(12px, 1.6vw, 28px);
+}
+.pulse-shell .shell {
+  max-width: 1600px;
+  grid-template-columns: 244px minmax(0, 1fr);
+  height: calc(100dvh - clamp(24px, 3.2vw, 56px));
+  border: 1px solid #c7d9e8;
+  border-radius: 22px;
+  box-shadow: 0 12px 42px #163a6310;
+}
+.pulse-shell .sidebar {
+  background: linear-gradient(155deg, #f6fbff, #eef7ff 64%, #e4f1fd);
+  border-right: 1px solid #d0e2ef;
+  padding: 24px 14px 16px;
+  gap: 24px;
+}
+.pulse-shell .brand { gap: 9px; padding: 0 4px 19px; border-bottom: 1px solid #cfdfec; }
+.pulse-shell .brand__mark {
+  width: 48px; height: 36px; flex: none; border-radius: 9px;
+  background: #065aca; color: white; font-size: 16px; letter-spacing: -.09em;
+}
+.pulse-shell .brand__name { color: #102e52; font-size: 16px; letter-spacing: -.04em; }
+.pulse-shell .brand__tagline { margin-top: 4px; font-size: 11px; color: #486783; }
+.pulse-shell .nav { gap: 20px; }
+.shell-nav-label {
+  margin: 0 0 6px; padding: 0 10px; color: #476781;
+  font-size: 11px; font-weight: 650; letter-spacing: .025em;
+}
+.pulse-shell .nav__item { min-height: 41px; border-radius: 9px; color: #25435f; }
+.pulse-shell .nav__item:hover { background: #ddebfa; color: #063d87; }
+.pulse-shell .nav__item--active, .pulse-shell .nav__item--active:hover {
+  color: #053e92; background: #d4eaff; box-shadow: inset 3px 0 #075bc8; font-weight: 700;
+}
+.pulse-shell .nav__item--active .nav__icon { color: #0756b5; }
+.pulse-shell .nav__badge { margin-left: auto; }
+.pulse-shell .side-pairs { padding-top: 0; border-top: 0; }
+.pulse-shell .side-pairs .nav__item { min-height: 34px; }
+.pulse-shell .side-note { border: 1px solid #d0e1ef; color: #395b76; background: #ffffffa8; }
+.pulse-shell .workspace { padding: clamp(20px, 2.3vw, 38px); }
+.pulse-shell .workspace__head { gap: 8px 16px; align-items: flex-start; margin-bottom: clamp(16px, 1.8vw, 28px); }
+.pulse-shell .workspace__title { color: #102f52; font-size: clamp(28px, 2.45vw, 40px); line-height: 1.12; letter-spacing: -.045em; }
+.pulse-shell .workspace__subtitle { max-width: 72ch; color: #4b667e; line-height: 1.45; }
+.pulse-shell .workspace__flags { align-self: flex-start; }
+.pulse-shell .workspace__flags .synthetic {
+  padding: 5px 10px; border: 1px solid #bdd8ef; border-radius: 7px;
+  color: #174e78; background: #eff8ff; font-size: 12px; line-height: 1.4;
+}
+.pulse-shell .sidebar :focus-visible { outline: 3px solid #086acc; outline-offset: 2px; }
+@media (max-width: 900px) {
+  .pulse-shell.app { padding: 0; background: #fff; }
+  .pulse-shell .shell { display: block; height: auto; min-height: 100dvh; border: 0; border-radius: 0; box-shadow: none; overflow: visible; }
+  .pulse-shell .sidebar { display: grid; grid-template-columns: minmax(0,1fr) auto; align-items: center; gap: 8px; overflow: visible; padding: 10px 16px; border: 0; border-bottom: 1px solid #cddfed; }
+  .pulse-shell .brand { border: 0; padding: 0; gap: 8px; }
+  .pulse-shell .brand__tagline { display: block; margin-top: 2px; }
+  .pulse-shell .sidebar .mobile-sections {
+    display: inline-flex; align-items: center; justify-self: end; grid-column: 2; grid-row: 1;
+    gap: 6px; min-height: 44px; padding: 8px 12px; border: 1px solid #bdd5eb;
+    border-radius: 8px; background: white; color: #124e91; font: inherit;
+  }
+  .pulse-shell .sidebar .nav { display: none; }
+  .pulse-shell .sidebar .shell-pair-group { display: none; }
+  .pulse-shell .sidebar--expanded .nav { grid-column: 1/-1; display: grid; gap: 12px; padding-top: 6px; }
+  .pulse-shell .sidebar--expanded .nav__list { display: grid; grid-template-columns: repeat(auto-fit,minmax(138px,1fr)); gap: 4px; padding: 0; }
+  .pulse-shell .sidebar--expanded .nav__item { white-space: normal; min-height: 44px; }
+  .pulse-shell .sidebar .side-logout { margin: 0; grid-column: 1/-1; justify-self: start; }
+  .pulse-shell .workspace { padding: 18px clamp(12px, 4vw, 28px) 24px; }
+  .pulse-shell .workspace__title { font-size: clamp(25px,5vw,32px); }
+  .pulse-shell .workspace__head { margin-bottom: 14px; }
+}
+@media print {
+  .pulse-shell.app, .pulse-shell .shell { padding: 0; border: 0; box-shadow: none; }
+}

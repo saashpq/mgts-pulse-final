@@ -1,0 +1,12 @@
+.review-rows { margin: 12px 0; padding: 0; list-style: none; }
+.review-rows li { display: flex; align-items: baseline; flex-wrap: wrap; gap: 3px 12px; padding: 6px 0; border-top: 1px solid var(--rule-soft); }
+.review-rows a { padding: 4px 0; }
+.sheet a[href="#text-review"], .review-rows a {
+  color: #20549b;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+.review-rows small, .review-pager span { color: var(--ink-3); }
+.review-pager { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; font-size: 14px; }
+.critical-review summary { cursor: pointer; font-weight: 650; }
+.critical-review[open] summary { margin-bottom: 8px; }

@@ -1,0 +1,2 @@
+/* Alias of survey-core.min.css, which no longer embeds any @font-face rule. */
+@import "./survey-core.min.css";

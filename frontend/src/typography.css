@@ -1,0 +1,80 @@
+/* Use the native interface family where available and bundle Cyrillic for offline devices. */
+@media screen {
+  :root {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI Variable Text', 'Golos Text Variable', system-ui, sans-serif;
+    font-size: 100%;
+    line-height: 1.5;
+    font-feature-settings: normal;
+    font-optical-sizing: auto;
+  }
+  :is(button, input, textarea, select) { font-family: inherit; }
+  :is(table, time, progress, .kpi__value, .qm__value, .month-scores) { font-variant-numeric: tabular-nums; }
+  .pulse-shell .workspace__title {
+    font-size: clamp(1.8rem, 1.28rem + 1.5vw, 2.65rem);
+    letter-spacing: -.036em; font-weight: 680; line-height: 1.12;
+  }
+  .workspace :is(h1, h2, h3, h4, h5), .form h1 { text-wrap: balance; }
+  .workspace :is(.sheet h2, .sig__title) { line-height: 1.25; letter-spacing: -.019em; }
+  .workspace .sheet h2 { font-size: clamp(1.21rem, 1.1rem + .45vw, 1.55rem); }
+  .workspace :is(.sheet > p, .sig__why, .q-caveat, .thr__hint, .sig__action, .month-evidence blockquote) {
+    max-inline-size: 69ch; line-height: 1.57; text-wrap: pretty;
+  }
+  .sheet > p + p { margin-block-start: .55rem; }
+  .workspace .sig__title { font-size: 1.12rem; }
+  .sig__facts, .sig__meta, .sheet__meta { font-variant-numeric: tabular-nums; }
+  .workspace .sig__ev { gap: .5rem; margin-block: .8rem; }
+  .workspace .brief {
+    width: 100%; max-width: 64rem; margin-inline: auto;
+    padding: clamp(1rem, 3.1vw, 3rem); font-size: 1rem; line-height: 1.55;
+  }
+  .brief-bar { max-width: 64rem; }
+  .brief__person { display: inline-block; max-width: 100%; }
+  .brief .brief__head { gap: 1rem 2rem; border-bottom: 1px solid var(--rule); padding-bottom: 1.25rem; }
+  .brief .brief__title { font-size: clamp(1.32rem, 1.1rem + .9vw, 1.95rem); font-weight: 650; line-height: 1.18; margin-top: .35rem; }
+  .brief__part { margin-block-start: clamp(1.6rem, 3vw, 2.6rem); }
+  .brief .brief__part-h { border-bottom: 0; margin-bottom: 1rem; font-size: clamp(1.25rem, 1.1rem + .7vw, 1.65rem); line-height: 1.25; }
+  .brief .brief__cols { gap: 1.25rem 2rem; margin-block: 0 1.5rem; }
+  .brief .brief__h { font-size: 1rem; font-weight: 650; margin: 0 0 .65rem; padding-bottom: .45rem; }
+  .brief .brief__qs, .brief .brief__points { gap: .65rem; max-inline-size: 63ch; }
+  .brief .brief__qs li::before { display: none; }
+  .brief .brief__qs { list-style: decimal; padding-inline-start: 1.55rem; }
+  .brief .brief__qs li { padding-inline-start: .25rem; }
+  .brief__qs li::marker { color: var(--brand); font-weight: 650; }
+  .brief .brief__signals { gap: 1.15rem; }
+  .brief .brief-sig { padding: .25rem 0 .25rem 1rem; }
+  .brief-sig__title { margin: .22rem 0 .4rem; font-size: 1.09rem; line-height: 1.3; font-weight: 650; }
+  .brief .brief-sig__act { max-width: 66ch; margin: 0; font-weight: 450; }
+  .brief .brief-sig__act::before { content: none; }
+  .brief .brief-sig__due { display: block; margin-top: .25rem; font-weight: 600; white-space: normal; }
+  .brief-evidence-toggle {
+    display: inline-flex; align-items: center; gap: .4rem; min-height: 40px; padding: 0 .25rem 0 0;
+    color: var(--brand); font: inherit; font-size: .9rem; font-weight: 600; border: 0; background: none; cursor: pointer;
+  }
+  .brief-evidence-toggle:hover { text-decoration: underline; }
+  .brief-evidence[data-open="false"] { display: none; }
+  .brief-evidence { max-width: 66ch; }
+  .brief .brief-sig__why { margin: 0; font-size: .94rem; line-height: 1.55; }
+  .brief .brief-sig__quote { font-style: normal; padding: .65rem .85rem; margin-top: .55rem; }
+  .brief .brief__foot { max-width: 70ch; font-size: .82rem; line-height: 1.5; }
+}
+@media screen and (max-width: 900px) {
+  .brief .brief__cols { grid-template-columns: 1fr; }
+}
+@media print {
+  .brief-sig__head, .brief-sig__title { display: inline; }
+  .brief-sig__title { margin: 0 0 0 4px; font-size: inherit; }
+  .brief__signal-heading { display: none; }
+  .brief-sig--ref .brief__points { display: inline; padding: 0; }
+  .brief-sig--ref .brief__points li { display: inline; }
+  .brief-sig--ref .brief__points li + li::before { content: ' · '; }
+}
+
+.flow-links { display: flex; flex-wrap: wrap; gap: .5rem 1.5rem; padding: .75rem 0; border-top: 1px solid var(--rule-soft); }
+.flow-links a, .signal-source-link { color: var(--brand); text-decoration: underline; text-underline-offset: .2em; }
+.flow-links a { display: inline-flex; align-items: center; min-height: 44px; font-weight: 600; }
+.signal-source-link { margin-inline-start: .55rem; font-size: .88rem; }
+.form-card > h2 { font-size: 1.2rem; margin-block: 1rem .2rem; }
+@media screen and (max-width: 600px) {
+  .overview-metrics.kpis { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); }
+  .overview-metrics .kpi { min-width: 0; }
+}

@@ -1,0 +1,884 @@
+{
+ "comments": [
+  {
+   "response_id": "P2-intern-M6",
+   "role": "intern",
+   "period": 6,
+   "question": "i_comment",
+   "text": "Всё та же рутина, нового не учусь. Смотрю другие стажировки.",
+   "analysis": {
+    "sentiment": -1,
+    "themes": [
+     "routine",
+     "no_growth",
+     "attrition"
+    ],
+    "quote": "Всё та же рутина, нового не учусь.",
+    "analyzer": "offline",
+    "offline_version": 3
+   }
+  },
+  {
+   "response_id": "P2-mentor-M6",
+   "role": "mentor",
+   "period": 6,
+   "question": "m_comment",
+   "text": "Работает нормально.",
+   "analysis": {
+    "sentiment": 0,
+    "themes": [],
+    "quote": "",
+    "analyzer": "offline",
+    "offline_version": 3
+   }
+  },
+  {
+   "response_id": "P2-intern-M5",
+   "role": "intern",
+   "period": 5,
+   "question": "i_comment",
+   "text": "Скучно. Задачи не меняются уже третий месяц, думаю, стоит ли продолжать.",
+   "analysis": {
+    "sentiment": -1,
+    "themes": [
+     "routine",
+     "attrition"
+    ],
+    "quote": "Скучно.",
+    "analyzer": "offline",
+    "offline_version": 3
+   }
+  },
+  {
+   "response_id": "P2-mentor-M5",
+   "role": "mentor",
+   "period": 5,
+   "question": "m_comment",
+   "text": "Всё хорошо, иногда стал медленнее.",
+   "analysis": {
+    "sentiment": 0,
+    "themes": [
+     "deadlines",
+     "praise"
+    ],
+    "quote": "Всё хорошо, иногда стал медленнее.",
+    "analyzer": "offline",
+    "offline_version": 3
+   }
+  },
+  {
+   "response_id": "P2-intern-M4",
+   "role": "intern",
+   "period": 4,
+   "question": "i_comment",
+   "text": "Рутина, одно и то же, не вижу развития. Скрипты уже написаны, только перезапускаю.",
+   "analysis": {
+    "sentiment": -1,
+    "themes": [
+     "routine",
+     "no_growth"
+    ],
+    "quote": "Рутина, одно и то же, не вижу развития.",
+    "analyzer": "offline",
+    "offline_version": 3
+   }
+  },
+  {
+   "response_id": "P2-mentor-M4",
+   "role": "mentor",
+   "period": 4,
+   "question": "m_comment",
+   "text": "Стабильно закрывает поток задач по дашбордам.",
+   "analysis": {
+    "sentiment": 0,
+    "themes": [],
+    "quote": "",
+    "analyzer": "offline",
+    "offline_version": 3
+   }
+  },
+  {
+   "response_id": "P2-intern-M3",
+   "role": "intern",
+   "period": 3,
+   "question": "i_comment",
+   "text": "Задачи однотипные: каждый день одно и то же обновление дашбордов.",
+   "analysis": {
+    "sentiment": -1,
+    "themes": [
+     "routine"
+    ],
+    "quote": "Задачи однотипные: каждый день одно и то же обновление дашбордов.",
+    "analyzer": "offline",
+    "offline_version": 3
+   }
+  },
+  {
+   "response_id": "P2-mentor-M3",
+   "role": "mentor",
+   "period": 3,
+   "question": "m_comment",
+   "text": "Всё отлично, задачи выполняет вовремя.",
+   "analysis": {
+    "sentiment": 1,
+    "themes": [
+     "praise"
+    ],
+    "quote": "Всё отлично, задачи выполняет вовремя.",
+    "analyzer": "offline",
+    "offline_version": 3
+   }
+  },
+  {
+   "response_id": "P2-intern-M2",
+   "role": "intern",
+   "period": 2,
+   "question": "i_comment",
+   "text": "Сделал первую интеграцию, понравилось. Хочу задачи посложнее.",
+   "analysis": {
+    "sentiment": 0,
+    "themes": [
+     "no_growth",
+     "praise"
+    ],
+    "quote": "Хочу задачи посложнее.",
+    "analyzer": "offline",
+    "offline_version": 3
+   }
+  },
+  {
+   "response_id": "P2-mentor-M2",
+   "role": "mentor",
+   "period": 2,
+   "question": "m_comment",
+   "text": "Сделал интеграцию раньше срока.",
+   "analysis": {
+    "sentiment": 1,
+    "themes": [
+     "growth"
+    ],
+    "quote": "Сделал интеграцию раньше срока.",
+    "analyzer": "offline",
+    "offline_version": 3
+   }
+  },
+  {
+   "response_id": "P2-intern-M1",
+   "role": "intern",
+   "period": 1,
+   "question": "i_comment",
+   "text": "Очень интересно, разбираюсь со скриптами обработки данных, всё новое.",
+   "analysis": {
+    "sentiment": 1,
+    "themes": [
+     "praise"
+    ],
+    "quote": "Очень интересно, разбираюсь со скриптами обработки данных, всё новое.",
+    "analyzer": "offline",
+    "offline_version": 3
+   }
+  },
+  {
+   "response_id": "P2-mentor-M1",
+   "role": "mentor",
+   "period": 1,
+   "question": "m_comment",
+   "text": "Сильный стажёр, быстро пишет скрипты.",
+   "analysis": {
+    "sentiment": 1,
+    "themes": [
+     "praise"
+    ],
+    "quote": "Сильный стажёр, быстро пишет скрипты.",
+    "analyzer": "offline",
+    "offline_version": 3
+   }
+  }
+ ],
+ "current": 6,
+ "low_score": 3,
+ "periods": 6,
+ "questions": [
+  {
+   "code": "i_overall",
+   "role": "intern",
+   "text": "Как в целом проходит стажировка?",
+   "dimension": "satisfaction",
+   "mirror": "m_overall",
+   "values": [
+    5,
+    5,
+    4,
+    3,
+    3,
+    2.5
+   ]
+  },
+  {
+   "code": "i_interest",
+   "role": "intern",
+   "text": "Насколько вам интересны задачи?",
+   "dimension": "interest",
+   "values": [
+    5,
+    5,
+    4,
+    3,
+    2,
+    2
+   ]
+  },
+  {
+   "code": "i_clarity",
+   "role": "intern",
+   "text": "Насколько понятны поставленные задачи?",
+   "dimension": "clarity",
+   "mirror": "m_understanding",
+   "values": [
+    4,
+    5,
+    5,
+    5,
+    5,
+    5
+   ]
+  },
+  {
+   "code": "i_support",
+   "role": "intern",
+   "text": "Хватает ли вам поддержки наставника?",
+   "dimension": "support",
+   "values": [
+    5,
+    4,
+    4,
+    4,
+    3,
+    3
+   ]
+  },
+  {
+   "code": "m_overall",
+   "role": "mentor",
+   "text": "Как стажёр справляется с работой?",
+   "dimension": "performance",
+   "mirror": "i_overall",
+   "values": [
+    5,
+    5,
+    5,
+    5,
+    4,
+    4
+   ]
+  },
+  {
+   "code": "m_speed",
+   "role": "mentor",
+   "text": "Насколько оперативно стажёр выполняет задачи?",
+   "dimension": "speed",
+   "values": [
+    5,
+    5,
+    5,
+    5,
+    4,
+    4
+   ]
+  },
+  {
+   "code": "m_autonomy",
+   "role": "mentor",
+   "text": "Насколько стажёр самостоятелен?",
+   "dimension": "autonomy",
+   "values": [
+    4,
+    5,
+    5,
+    5,
+    5,
+    5
+   ]
+  },
+  {
+   "code": "m_understanding",
+   "role": "mentor",
+   "text": "Насколько стажёр понимает поставленные задачи?",
+   "dimension": "clarity",
+   "mirror": "i_clarity",
+   "values": [
+    5,
+    5,
+    5,
+    5,
+    5,
+    5
+   ]
+  }
+ ],
+ "report": {
+  "pair": "P2",
+  "intern": "I-02",
+  "mentor": "M-02",
+  "track": "Автоматизация процессов",
+  "status": "attention",
+  "headline": "Риск ухода со стажировки",
+  "signals": [
+   {
+    "episode": 5,
+    "id": "P2-S10",
+    "pair": "P2",
+    "type": "S10",
+    "title": "Риск ухода со стажировки",
+    "severity": "high",
+    "source": "hybrid",
+    "first_period": 6,
+    "last_period": 6,
+    "explanation": "В комментарии стажёра за M6 есть признаки риска ухода. Отдельный сигнал по оценкам — «Устойчивое снижение удовлетворённости стажёра» (M6).",
+    "action": "Предложите стажёру личный разговор, уточните его планы и спросите, какая поддержка ему нужна.",
+    "due_days": 2,
+    "evidence": [
+     {
+      "response_id": "P2-intern-M6",
+      "role": "intern",
+      "period": 6,
+      "question": "i_comment",
+      "quote": "Смотрю другие стажировки.",
+      "analyzer": "offline"
+     },
+     {
+      "response_id": "P2-intern-M3",
+      "role": "intern",
+      "period": 3,
+      "text": "среднее по вопросам с оценкой",
+      "value": 4.25
+     },
+     {
+      "response_id": "P2-intern-M6",
+      "role": "intern",
+      "period": 6,
+      "text": "среднее по вопросам с оценкой",
+      "value": 3.13
+     }
+    ],
+    "first_seen": 5,
+    "primary": true,
+    "related": [
+     "P2-S7",
+     "P2-S3",
+     "P2-S1",
+     "P2-S4",
+     "P2-S9-intern"
+    ],
+    "seen_at": "2026-11-23T17:05:56Z",
+    "overdue": false
+   },
+   {
+    "episode": 3,
+    "id": "P2-S7",
+    "pair": "P2",
+    "type": "S7",
+    "title": "Потеря мотивации стажёра",
+    "severity": "high",
+    "source": "hybrid",
+    "first_period": 1,
+    "last_period": 6,
+    "explanation": "Интерес к задачам упал с 5.00 (база M1–M2) до 2.00 (M6), падение ≥ 1.00; в комментариях — рутина или отсутствие развития",
+    "action": "Пересмотреть задачи вместе с наставником: усложнить или дать ротацию",
+    "due_days": 5,
+    "evidence": [
+     {
+      "response_id": "P2-intern-M6",
+      "role": "intern",
+      "period": 6,
+      "question": "i_interest",
+      "text": "Насколько вам интересны задачи?",
+      "value": 2
+     },
+     {
+      "response_id": "P2-intern-M6",
+      "role": "intern",
+      "period": 6,
+      "question": "i_comment",
+      "quote": "Всё та же рутина, нового не учусь.",
+      "analyzer": "offline"
+     }
+    ],
+    "first_seen": 3,
+    "primary": false,
+    "related": [],
+    "seen_at": "2026-11-23T17:05:56Z",
+    "overdue": false
+   },
+   {
+    "episode": 4,
+    "id": "P2-S3",
+    "pair": "P2",
+    "type": "S3",
+    "title": "Расхождение восприятия в паре",
+    "severity": "high",
+    "source": "rules",
+    "first_period": 3,
+    "last_period": 6,
+    "explanation": "«Как в целом проходит стажировка?» (стажёр) и «Как стажёр справляется с работой?» (наставник) расходятся до 2.00 балла с M3 по M6 (порог 1.00, не меньше 2 мес. подряд)",
+    "action": "Совместная встреча стажёра, наставника и HR: сверка ожиданий",
+    "due_days": 5,
+    "evidence": [
+     {
+      "response_id": "P2-intern-M6",
+      "role": "intern",
+      "period": 6,
+      "question": "i_overall",
+      "text": "Как в целом проходит стажировка?",
+      "value": 2.5
+     },
+     {
+      "response_id": "P2-mentor-M6",
+      "role": "mentor",
+      "period": 6,
+      "question": "m_overall",
+      "text": "Как стажёр справляется с работой?",
+      "value": 4
+     }
+    ],
+    "first_seen": 4,
+    "primary": false,
+    "related": [],
+    "seen_at": "2026-11-23T17:05:56Z",
+    "overdue": false
+   },
+   {
+    "episode": 4,
+    "id": "P2-S1",
+    "pair": "P2",
+    "type": "S1",
+    "title": "Устойчивое снижение удовлетворённости стажёра",
+    "severity": "medium",
+    "source": "rules",
+    "first_period": 3,
+    "last_period": 6,
+    "explanation": "Удовлетворённость стажёра в M6 — 3.13: устойчивое снижение: 0.44 балла/мес за 4 месяца, на 1.13 ниже базы 4.25 (пороги 0.25 и 0.50)",
+    "action": "Встреча HR 1:1 со стажёром: что изменилось и чем помочь",
+    "due_days": 3,
+    "evidence": [
+     {
+      "response_id": "P2-intern-M3",
+      "role": "intern",
+      "period": 3,
+      "text": "среднее по вопросам с оценкой",
+      "value": 4.25
+     },
+     {
+      "response_id": "P2-intern-M6",
+      "role": "intern",
+      "period": 6,
+      "text": "среднее по вопросам с оценкой",
+      "value": 3.13
+     }
+    ],
+    "first_seen": 4,
+    "primary": false,
+    "related": [],
+    "seen_at": "2026-11-23T17:05:56Z",
+    "overdue": false
+   },
+   {
+    "episode": 5,
+    "id": "P2-S4",
+    "pair": "P2",
+    "type": "S4",
+    "title": "«Слепое пятно»: стороны видят ситуацию по-разному",
+    "severity": "medium",
+    "source": "rules",
+    "first_period": 4,
+    "last_period": 6,
+    "explanation": "С M4 по M6 наставник доволен работой (4+), а стажёр оценивает стажировку на 3 и ниже: наставник может не видеть проблему",
+    "action": "Наставник даёт стажёру конкретную обратную связь по критериям",
+    "due_days": 5,
+    "evidence": [
+     {
+      "response_id": "P2-mentor-M6",
+      "role": "mentor",
+      "period": 6,
+      "question": "m_overall",
+      "text": "Как стажёр справляется с работой?",
+      "value": 4
+     },
+     {
+      "response_id": "P2-intern-M6",
+      "role": "intern",
+      "period": 6,
+      "question": "i_overall",
+      "text": "Как в целом проходит стажировка?",
+      "value": 2.5
+     }
+    ],
+    "first_seen": 5,
+    "primary": false,
+    "related": [],
+    "seen_at": "2026-11-23T17:05:56Z",
+    "overdue": false
+   },
+   {
+    "episode": 4,
+    "id": "P2-S9-intern",
+    "pair": "P2",
+    "type": "S9",
+    "title": "Повторяющаяся проблема в комментариях (стажёра)",
+    "severity": "medium",
+    "source": "text",
+    "first_period": 3,
+    "last_period": 6,
+    "explanation": "Тема «рутина, однотипные задачи» в комментариях стажёра повторяется 4 мес.: M3, M4, M5, M6",
+    "action": "Уточните у автора, сохраняется ли проблема. Если да, передайте её руководителю программы и согласуйте ответственного за решение.",
+    "due_days": 7,
+    "evidence": [
+     {
+      "response_id": "P2-intern-M5",
+      "role": "intern",
+      "period": 5,
+      "question": "i_comment",
+      "quote": "Скучно.",
+      "analyzer": "offline"
+     },
+     {
+      "response_id": "P2-intern-M6",
+      "role": "intern",
+      "period": 6,
+      "question": "i_comment",
+      "quote": "Всё та же рутина, нового не учусь.",
+      "analyzer": "offline"
+     }
+    ],
+    "first_seen": 4,
+    "primary": false,
+    "related": [],
+    "seen_at": "2026-11-23T17:05:56Z",
+    "overdue": false
+   }
+  ],
+  "resolved": [],
+  "history": [
+   "",
+   "",
+   "high",
+   "high",
+   "high",
+   "high"
+  ],
+  "problem_alerts": [
+   false,
+   false,
+   true,
+   true,
+   true,
+   true
+  ],
+  "intern_index": [
+   4.75,
+   4.75,
+   4.25,
+   3.75,
+   3.25,
+   3.13
+  ],
+  "mentor_index": [
+   4.75,
+   5,
+   5,
+   5,
+   4.5,
+   4.5
+  ],
+  "detection": {
+   "ours": 3,
+   "naive": 0
+  },
+  "summary": "Пара P2 (требует вмешательства): риск ухода со стажировки. В комментарии стажёра за M6 есть признаки риска ухода. Отдельный сигнал по оценкам — «Устойчивое снижение удовлетворённости стажёра» (M6).. Цитата (стажёр, M6): «Смотрю другие стажировки.». Рекомендуемое действие: предложите стажёру личный разговор, уточните его планы и спросите, какая поддержка ему нужна. — в течение 2 дн. Ещё сигналов: 5.",
+  "diff": [
+   0,
+   -0.25,
+   -0.75,
+   -1.25,
+   -1.25,
+   -1.38
+  ],
+  "agreement": {
+   "bias": -0.81,
+   "sd": 0.58,
+   "loa_lo": -1.95,
+   "loa_hi": 0.32,
+   "n": 6,
+   "method": "simple"
+  },
+  "actions": []
+ },
+ "responses": [
+  {
+   "id": "P2-intern-M1",
+   "role": "intern",
+   "person": "I-02",
+   "pair": "P2",
+   "period": 1,
+   "scores": {
+    "i_clarity": 4,
+    "i_interest": 5,
+    "i_overall": 5,
+    "i_support": 5
+   },
+   "comments": {
+    "i_comment": "Очень интересно, разбираюсь со скриптами обработки данных, всё новое."
+   },
+   "source": "synthetic",
+   "at": "2026-11-23T17:05:56Z"
+  },
+  {
+   "id": "P2-intern-M2",
+   "role": "intern",
+   "person": "I-02",
+   "pair": "P2",
+   "period": 2,
+   "scores": {
+    "i_clarity": 5,
+    "i_interest": 5,
+    "i_overall": 5,
+    "i_support": 4
+   },
+   "comments": {
+    "i_comment": "Сделал первую интеграцию, понравилось. Хочу задачи посложнее."
+   },
+   "source": "synthetic",
+   "at": "2026-11-23T17:05:56Z"
+  },
+  {
+   "id": "P2-intern-M3",
+   "role": "intern",
+   "person": "I-02",
+   "pair": "P2",
+   "period": 3,
+   "scores": {
+    "i_clarity": 5,
+    "i_interest": 4,
+    "i_overall": 4,
+    "i_support": 4
+   },
+   "comments": {
+    "i_comment": "Задачи однотипные: каждый день одно и то же обновление дашбордов."
+   },
+   "source": "synthetic",
+   "at": "2026-11-23T17:05:56Z"
+  },
+  {
+   "id": "P2-intern-M4",
+   "role": "intern",
+   "person": "I-02",
+   "pair": "P2",
+   "period": 4,
+   "scores": {
+    "i_clarity": 5,
+    "i_interest": 3,
+    "i_overall": 3,
+    "i_support": 4
+   },
+   "comments": {
+    "i_comment": "Рутина, одно и то же, не вижу развития. Скрипты уже написаны, только перезапускаю."
+   },
+   "source": "synthetic",
+   "at": "2026-11-23T17:05:56Z"
+  },
+  {
+   "id": "P2-intern-M5",
+   "role": "intern",
+   "person": "I-02",
+   "pair": "P2",
+   "period": 5,
+   "scores": {
+    "i_clarity": 5,
+    "i_interest": 2,
+    "i_overall": 3,
+    "i_support": 3
+   },
+   "comments": {
+    "i_comment": "Скучно. Задачи не меняются уже третий месяц, думаю, стоит ли продолжать."
+   },
+   "source": "synthetic",
+   "at": "2026-11-23T17:05:56Z"
+  },
+  {
+   "id": "P2-intern-M6",
+   "role": "intern",
+   "person": "I-02",
+   "pair": "P2",
+   "period": 6,
+   "scores": {
+    "i_clarity": 5,
+    "i_interest": 2,
+    "i_overall": 2.5,
+    "i_support": 3
+   },
+   "comments": {
+    "i_comment": "Всё та же рутина, нового не учусь. Смотрю другие стажировки."
+   },
+   "source": "synthetic",
+   "at": "2026-11-23T17:05:56Z"
+  },
+  {
+   "id": "P2-mentor-M1",
+   "role": "mentor",
+   "person": "M-02",
+   "pair": "P2",
+   "period": 1,
+   "scores": {
+    "m_autonomy": 4,
+    "m_overall": 5,
+    "m_speed": 5,
+    "m_understanding": 5
+   },
+   "comments": {
+    "m_comment": "Сильный стажёр, быстро пишет скрипты."
+   },
+   "source": "synthetic",
+   "at": "2026-11-23T17:05:56Z"
+  },
+  {
+   "id": "P2-mentor-M2",
+   "role": "mentor",
+   "person": "M-02",
+   "pair": "P2",
+   "period": 2,
+   "scores": {
+    "m_autonomy": 5,
+    "m_overall": 5,
+    "m_speed": 5,
+    "m_understanding": 5
+   },
+   "comments": {
+    "m_comment": "Сделал интеграцию раньше срока."
+   },
+   "source": "synthetic",
+   "at": "2026-11-23T17:05:56Z"
+  },
+  {
+   "id": "P2-mentor-M3",
+   "role": "mentor",
+   "person": "M-02",
+   "pair": "P2",
+   "period": 3,
+   "scores": {
+    "m_autonomy": 5,
+    "m_overall": 5,
+    "m_speed": 5,
+    "m_understanding": 5
+   },
+   "comments": {
+    "m_comment": "Всё отлично, задачи выполняет вовремя."
+   },
+   "source": "synthetic",
+   "at": "2026-11-23T17:05:56Z"
+  },
+  {
+   "id": "P2-mentor-M4",
+   "role": "mentor",
+   "person": "M-02",
+   "pair": "P2",
+   "period": 4,
+   "scores": {
+    "m_autonomy": 5,
+    "m_overall": 5,
+    "m_speed": 5,
+    "m_understanding": 5
+   },
+   "comments": {
+    "m_comment": "Стабильно закрывает поток задач по дашбордам."
+   },
+   "source": "synthetic",
+   "at": "2026-11-23T17:05:56Z"
+  },
+  {
+   "id": "P2-mentor-M5",
+   "role": "mentor",
+   "person": "M-02",
+   "pair": "P2",
+   "period": 5,
+   "scores": {
+    "m_autonomy": 5,
+    "m_overall": 4,
+    "m_speed": 4,
+    "m_understanding": 5
+   },
+   "comments": {
+    "m_comment": "Всё хорошо, иногда стал медленнее."
+   },
+   "source": "synthetic",
+   "at": "2026-11-23T17:05:56Z"
+  },
+  {
+   "id": "P2-mentor-M6",
+   "role": "mentor",
+   "person": "M-02",
+   "pair": "P2",
+   "period": 6,
+   "scores": {
+    "m_autonomy": 5,
+    "m_overall": 4,
+    "m_speed": 4,
+    "m_understanding": 5
+   },
+   "comments": {
+    "m_comment": "Работает нормально."
+   },
+   "source": "synthetic",
+   "at": "2026-11-23T17:05:56Z"
+  }
+ ],
+ "themes": {
+  "attrition": {
+   "label": "риск ухода",
+   "negative": true
+  },
+  "conflict": {
+   "label": "конфликт в паре",
+   "negative": true
+  },
+  "deadlines": {
+   "label": "срывы сроков, медленно",
+   "negative": true
+  },
+  "growth": {
+   "label": "рост и самостоятельность",
+   "negative": false
+  },
+  "no_growth": {
+   "label": "нет развития",
+   "negative": true
+  },
+  "no_support": {
+   "label": "не хватает поддержки наставника",
+   "negative": true
+  },
+  "overload": {
+   "label": "перегрузка",
+   "negative": true
+  },
+  "passivity": {
+   "label": "мало самостоятельности",
+   "negative": true
+  },
+  "praise": {
+   "label": "довольны работой",
+   "negative": false
+  },
+  "quality": {
+   "label": "ошибки в работе",
+   "negative": true
+  },
+  "routine": {
+   "label": "рутина, однотипные задачи",
+   "negative": true
+  },
+  "unclear": {
+   "label": "непонятные задачи",
+   "negative": true
+  }
+ }
+}

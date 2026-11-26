@@ -1,0 +1,36 @@
+.pair-profile__people, .pair-jump, .pair-route, .month-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: .5rem 1rem;
+}
+.pair-profile__people { margin: .4rem 0 .8rem; color: #466078; }
+.pair-profile__people b { color: #183850; }
+.pair-route { justify-content: space-between; }
+.pair-route .back-link { margin: 0; }
+.pair-jump { gap: .3rem; padding: .38rem; background: #edf6ff; border: 1px solid #d1e5f7; border-radius: 12px; }
+.pair-jump a, .pair-source { color: #114f8a; text-decoration: underline; text-decoration-color: #8eacc7; text-underline-offset: .21em; }
+.pair-jump a { display: inline-flex; align-items: center; min-height: 40px; border-radius: 8px; padding: .4rem .8rem; font-size: .9rem; font-weight: 600; }
+.pair-jump a:hover, .pair-source:hover { background: white; color: #063d76; }
+.pair-source { background: transparent; border: 0; font: inherit; display: inline-block; margin-inline-start: .35rem; padding: .2rem .28rem; font-weight: 600; cursor: pointer; }
+.month-controls { gap: .4rem; }
+.month-controls button { min-width: 40px; min-height: 40px; font-size: 1.25rem; border: 1px solid #bfdaec; border-radius: 8px; background: #fff; color: #154b7a; cursor: pointer; }
+.month-controls button:disabled { color: #657689; background: #f3f6f9; cursor: default; }
+.month-evidence .month-evidence__role { border: 1px solid #c9dff0; border-top: 4px solid #1f61a8; border-radius: 12px; padding: clamp(12px,2vw,20px); background: #f8fbff; }
+.month-evidence .month-evidence__role--mentor { border-top-color: #1883a4; background: #f4fbfd; }
+.month-evidence .month-evidence__role blockquote { background: white; border-left-color: #6c9cc9; padding: .75rem .85rem; }
+.month-evidence .month-scores dd { color: #124977; }
+.brief-jump { margin-top: 1rem; }
+@media print {
+  .brief__part-h { break-after: avoid; }
+  .brief__sec:has(.brief__notes) { break-inside: avoid; }
+}
+@media screen {
+  .brief__part--intern .brief__part-h, .brief__part--mentor .brief__part-h { border-inline-start: 4px solid #1f61a8; padding-inline-start: .65rem; }
+  .brief__part--mentor .brief__part-h { border-color: #1883a4; }
+}
+@media (max-width: 640px) {
+  .pair-profile .sheet__head, .month-evidence > .sheet__head { align-items: flex-start; flex-direction: column; }
+  .pair-profile .hero__actions { flex-wrap: wrap; justify-content: flex-start; }
+  .pair-jump a { flex: 1 1 42%; padding: .35rem .6rem; }
+}

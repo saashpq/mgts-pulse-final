@@ -1,0 +1,182 @@
+{
+  "title": "Ежемесячный опрос программы стажировок МГТС",
+  "periods": 6,
+  "questions": [
+    {
+      "code": "i_overall",
+      "role": "intern",
+      "text": "Как в целом проходит стажировка?",
+      "kind": "scale",
+      "max": 5,
+      "dimension": "satisfaction",
+      "mirror": "m_overall",
+      "aliases": [
+        "как проходит стажировка",
+        "общая оценка",
+        "удовлетворенность"
+      ]
+    },
+    {
+      "code": "i_interest",
+      "role": "intern",
+      "text": "Насколько вам интересны задачи?",
+      "kind": "scale",
+      "max": 5,
+      "dimension": "interest",
+      "aliases": [
+        "интерес",
+        "интересны ли задачи"
+      ]
+    },
+    {
+      "code": "i_clarity",
+      "role": "intern",
+      "text": "Насколько понятны поставленные задачи?",
+      "kind": "scale",
+      "max": 5,
+      "dimension": "clarity",
+      "mirror": "m_understanding",
+      "aliases": [
+        "понятность",
+        "понятны ли задачи"
+      ]
+    },
+    {
+      "code": "i_support",
+      "role": "intern",
+      "text": "Хватает ли вам поддержки наставника?",
+      "kind": "scale",
+      "max": 5,
+      "dimension": "support",
+      "aliases": [
+        "поддержка",
+        "поддержка наставника"
+      ]
+    },
+    {
+      "code": "i_comment",
+      "role": "intern",
+      "text": "Что получилось, что мешает, что хотели бы изменить?",
+      "kind": "text",
+      "aliases": [
+        "комментарий",
+        "комментарий стажера"
+      ]
+    },
+    {
+      "code": "m_overall",
+      "role": "mentor",
+      "text": "Как стажёр справляется с работой?",
+      "kind": "scale",
+      "max": 5,
+      "dimension": "performance",
+      "mirror": "i_overall",
+      "aliases": [
+        "как справляется",
+        "общая оценка стажера"
+      ]
+    },
+    {
+      "code": "m_speed",
+      "role": "mentor",
+      "text": "Насколько оперативно стажёр выполняет задачи?",
+      "kind": "scale",
+      "max": 5,
+      "dimension": "speed",
+      "aliases": [
+        "оперативность"
+      ]
+    },
+    {
+      "code": "m_autonomy",
+      "role": "mentor",
+      "text": "Насколько стажёр самостоятелен?",
+      "kind": "scale",
+      "max": 5,
+      "dimension": "autonomy",
+      "aliases": [
+        "самостоятельность"
+      ]
+    },
+    {
+      "code": "m_understanding",
+      "role": "mentor",
+      "text": "Насколько стажёр понимает поставленные задачи?",
+      "kind": "scale",
+      "max": 5,
+      "dimension": "clarity",
+      "mirror": "i_clarity",
+      "aliases": [
+        "понимание задач"
+      ]
+    },
+    {
+      "code": "m_comment",
+      "role": "mentor",
+      "text": "Комментарий наставника о работе стажёра",
+      "kind": "text",
+      "aliases": [
+        "комментарий",
+        "комментарий наставника"
+      ]
+    }
+  ],
+  "id_columns": {
+    "intern": [
+      "intern_id",
+      "id стажера",
+      "стажер",
+      "стажер id"
+    ],
+    "mentor": [
+      "mentor_id",
+      "id наставника",
+      "наставник",
+      "наставник id"
+    ],
+    "period": [
+      "period",
+      "месяц",
+      "период",
+      "month",
+      "номер месяца"
+    ]
+  },
+  "pairs": [
+    {
+      "id": "P1",
+      "intern": "I-01",
+      "mentor": "M-01",
+      "demo": true,
+      "track": "Аналитика"
+    },
+    {
+      "id": "P2",
+      "intern": "I-02",
+      "mentor": "M-02",
+      "demo": true,
+      "track": "Автоматизация процессов"
+    },
+    {
+      "id": "P3",
+      "intern": "I-03",
+      "mentor": "M-03",
+      "demo": true,
+      "track": "Разработка"
+    },
+    {
+      "id": "P4",
+      "intern": "I-04",
+      "mentor": "M-04",
+      "demo": true,
+      "track": "ПТО"
+    },
+    {
+      "id": "P5",
+      "intern": "I-05",
+      "mentor": "M-05",
+      "demo": true,
+      "track": "Клиентский сервис"
+    }
+  ]
+}
