@@ -51,6 +51,7 @@ func Import(tables []Table, sv *survey.Survey, roleHint survey.Role, source stri
 // остальные листы сопоставляются автоматически. mapping должен быть проверен ValidateMapping.
 func ImportMapped(tables []Table, sv *survey.Survey, roleHint survey.Role, mapping Mapping, source string) Report {
 	rep := Report{Sheets: []SheetReport{}}
+	firstRow := map[string]string{}
 	type sheetPlan struct {
 		t Table
 		h int
@@ -136,6 +137,13 @@ func ImportMapped(tables []Table, sv *survey.Survey, roleHint survey.Role, mappi
 				}
 			} else {
 				resp, err = buildResponse(row, p.cols, p.role, p.idI, p.idM, index, sv, &rep)
+			}
+			if err == nil {
+				if earlier, duplicate := firstRow[resp.ID]; duplicate {
+					err = fmt.Errorf("повтор анкеты за тот же месяц и роль; исходная строка %s", earlier)
+				} else {
+					firstRow[resp.ID] = fmt.Sprintf("%s/%d", t.Name, line)
+				}
 			}
 			if err != nil {
 				rep.Rejected++
@@ -313,12 +321,15 @@ func buildResponse(row []string, cols map[int]string, role survey.Role, idI, idM
 			continue
 		}
 		if q.Kind == "text" {
+			if len([]rune(v)) > 2000 {
+				return survey.Response{}, fmt.Errorf("%s: комментарий длиннее 2000 символов", code)
+			}
 			r.Comments[code] = cleanText(v)
 			continue
 		}
 		f, err := strconv.ParseFloat(strings.Replace(v, ",", ".", 1), 64)
-		if err != nil || math.IsNaN(f) || f < 1 || f > q.Max {
-			return survey.Response{}, fmt.Errorf("%s: значение %q вне шкалы 1..%g", code, v, q.Max)
+		if err != nil || math.IsNaN(f) || f < 1 || f > q.Max || (!sv.FractionalHistory && f != math.Trunc(f)) {
+			return survey.Response{}, fmt.Errorf("%s: значение %q вне шкалы целых чисел 1..%g", code, v, q.Max)
 		}
 		r.Scores[code] = f
 	}

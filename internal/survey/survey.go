@@ -31,12 +31,13 @@ type Question struct {
 
 // Survey — обе анкеты и названия служебных колонок.
 type Survey struct {
-	Title       string     `json:"title"`
-	Periods     int        `json:"periods"`
-	StartMonth  string     `json:"start_month,omitempty"`
-	Questions   []Question `json:"questions"`
-	IDColumns   Columns    `json:"id_columns"`
-	Participant []Pair     `json:"pairs"`
+	FractionalHistory bool       `json:"fractional_history,omitempty"` // Legacy synthetic qualification workbook used fractional scores.
+	Title             string     `json:"title"`
+	Periods           int        `json:"periods"`
+	StartMonth        string     `json:"start_month,omitempty"`
+	Questions         []Question `json:"questions"`
+	IDColumns         Columns    `json:"id_columns"`
+	Participant       []Pair     `json:"pairs"`
 }
 
 // Columns — варианты заголовков служебных колонок.
@@ -187,8 +188,9 @@ func (q Question) Norm(v float64) float64 {
 // стажировка, интересны и понятны ли задачи; наставника — как стажёр справляется, оперативность, самостоятельность.
 func Default() Survey {
 	return Survey{
-		Title:   "Ежемесячный опрос программы стажировок МГТС",
-		Periods: 6,
+		FractionalHistory: true,
+		Title:             "Ежемесячный опрос программы стажировок МГТС",
+		Periods:           6,
 		Questions: []Question{
 			{Code: "i_overall", Role: Intern, Kind: "scale", Max: 5, Dimension: "satisfaction", Mirror: "m_overall",
 				Text: "Как в целом проходит стажировка?", Aliases: []string{"как проходит стажировка", "общая оценка", "удовлетворенность"}},

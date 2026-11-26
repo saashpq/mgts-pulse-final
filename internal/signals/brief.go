@@ -83,6 +83,10 @@ var QuestionTemplates = map[string][]BriefQuestion{
 		{"intern", "Что в последней задаче хотелось бы уточнить или изменить?"},
 		{"mentor", "Как можно вместе со стажёром пересобрать следующую задачу?"},
 	},
+	"S16": {
+		{"intern", "Что повлияло на твою оценку в этом месяце и какую помощь стоит обсудить?"},
+		{"mentor", "Какие наблюдения легли в основу оценки и что изменилось за этот месяц?"},
+	},
 }
 
 // genericQuestions — добор до трёх вопросов, когда сигналов мало или нет.
@@ -128,7 +132,7 @@ func Side(s Signal) string {
 		return "intern"
 	case "S2", "S8":
 		return "mentor"
-	case "S10": // текст одной стороны: цитату другой стороне не пересказывают
+	case "S10", "S16": // Evidence from only one author.
 		if len(s.Evidence) > 0 && (s.Evidence[0].Role == "intern" || s.Evidence[0].Role == "mentor") {
 			return s.Evidence[0].Role
 		}

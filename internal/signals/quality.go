@@ -314,8 +314,7 @@ func buildQuality(in Input, rep *ProgramReport, views map[string]*PairView, sigm
 	n := len(in.Survey.Participant)
 	q := Quality{Scales: scales(in, views, sigma), TextAI: textAI(in), ActionEffect: actionEffect(rep.Actions)}
 	q.Caveat = fmt.Sprintf("Метрики на %d парах; интервалы широкие. Сигнал — повод для разговора, решение принимает HR.", n)
-	q.ICCNote = fmt.Sprintf("ICC не считается: для интерпретации нужно не меньше 30 пар (Koo & Li 2016), сейчас %d; "+
-		"стажёр и наставник отвечают на разные вопросы, поэтому согласие показано смещением и пределами Бланда–Альтмана.", n)
+	q.ICCNote = fmt.Sprintf("В выборке %d пар. Сравнение описательное: используем первую явно сопоставленную пару вопросов. Размер выборки не позволяет оценить точность прогноза.", n)
 	if flapping == nil {
 		flapping = []string{}
 	}

@@ -185,7 +185,7 @@ function QualityReport({ overview }: { overview: OverviewData }) {
         <h2 id="q-surveys" tabIndex={-1}>Оценки в анкетах</h2>
         <div className="quality-panels">
           <Scales sc={ql?.scales ?? null} />
-          <AgreementSection ag={ql?.agreement ?? null} icc={ql?.icc_note} pairs={r.pairs} />
+          <AgreementSection ag={r.pairs.some(p => p.agreement_questions?.length) ? ql?.agreement ?? null : null} icc={ql?.icc_note} pairs={r.pairs} />
         </div>
       </section>
       {!ql && <NoData>В этом отчёте доступны только отдельные показатели. Для полного отчёта нужна версия системы с расчётом качества.</NoData>}
@@ -401,12 +401,12 @@ function Scales({ sc }: { sc: Q['scales'] | null }) {
 }
 
 function AgreementSection({ ag, icc, pairs }: { ag: Q['agreement'] | null; icc?: string; pairs: PairReport[] }) {
-  const pts = baPoints(pairs);
+  const pts = baPoints(pairs.map(p => ({ pair:p.pair,intern_index:p.agreement_intern ?? [],mentor_index:p.agreement_mentor ?? [] })));
   const perPair = pairs.filter((p) => p.agreement);
   return (
     <QualityPanel id="q-agree" title="Согласие сторон"
       result={ag ? `${ag.n} ${plural(ag.n, 'парное наблюдение', 'парных наблюдения', 'парных наблюдений')}` : 'Недостаточно совместных наблюдений'}
-      source="Месяцы, в которых ответили оба участника пары. Из индекса стажёра вычитается индекс наставника.">
+      source="Для одного сопоставимого показателя из оценки стажёра вычитаем оценку наставника за тот же месяц. Включены только месяцы с обеими оценками.">
       {ag ? (
         <>
           <dl className="qm">
@@ -414,7 +414,7 @@ function AgreementSection({ ag, icc, pairs }: { ag: Q['agreement'] | null; icc?:
             <Metric
               label="Границы согласия (95%)"
               value={`${signed(ag.loa_lo, 2)} … ${signed(ag.loa_hi, 2)}`}
-              means="Расчётный диапазон разницы индексов по методу Бланда–Альтмана. Широкие границы указывают на большой разброс."
+              means="Расчётный диапазон разницы по сопоставимому вопросу. Широкие границы указывают на большой разброс."
             />
             <Metric label="Наблюдений" value={ag.n} means={`Месяцев, где ответили обе стороны${ag.method ? ` · метод: ${ag.method}` : ''}.`} />
           </dl>

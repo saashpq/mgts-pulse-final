@@ -67,9 +67,11 @@ func ThemeByCode(code string) (Theme, bool) {
 
 // Analysis — результат разбора одного комментария.
 type Analysis struct {
-	Sentiment float64  `json:"sentiment"` // −1..1
-	Themes    []string `json:"themes"`
-	Quote     string   `json:"quote"` // дословный фрагмент комментария, на котором основан вывод
+	Source     *Source  `json:"source,omitempty"`
+	HRQuestion string   `json:"hr_question,omitempty"`
+	Sentiment  float64  `json:"sentiment"` // −1..1
+	Themes     []string `json:"themes"`
+	Quote      string   `json:"quote"` // дословный фрагмент комментария, на котором основан вывод
 	// ByTheme — цитата под каждую тему (офлайн-анализатор знает, какое предложение дало тему).
 	ByTheme  map[string]string `json:"by_theme,omitempty"`
 	Analyzer string            `json:"analyzer"`

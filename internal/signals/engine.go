@@ -15,6 +15,7 @@ import (
 type Severity string
 
 const (
+	Info   Severity = "info"
 	Low    Severity = "low"
 	Medium Severity = "medium"
 	High   Severity = "high"
@@ -36,7 +37,10 @@ func (s Severity) rank() int {
 // поэтому они задаются с экспертом и правятся HR (PUT /api/v1/thresholds). Обоснование S1/S2 и цены ошибок —
 // docs/calibration.md (имитация: шум пункта 0.6, известный месяц начала проблемы).
 type Thresholds struct {
+	DeclineFromPeak float64 `json:"-"`                 // Seed API: fall from the absolute peak.
+	GapPeriods      int     `json:"-"`                 // Seed API: consecutive matched months.
 	DeclineSlope    float64 `json:"decline_slope"`     // S1/S2: наклон Тейла–Сена по 4 месяцам, балл/мес
+	ItemDrop        float64 `json:"item_drop"`         // S16: minimum decline of a single scale item.
 	ZDrop           float64 `json:"z_drop"`            // S1/S2: резкий провал — z ≤ −ZDrop к собственной базе
 	DeclineFromBase float64 `json:"decline_from_base"` // S1/S2: устойчивое снижение — ниже собственной базы не меньше чем на
 	CostRatio       float64 `json:"cost_ratio"`        // C_FN/C_FP: сколько лишних разговоров HR готов провести ради одного найденного
@@ -54,7 +58,7 @@ type Thresholds struct {
 	ShortRatio      float64 `json:"short_ratio"`       // S12: длина комментария < доли от обычной
 }
 
-var Default = Thresholds{DeclineSlope: -0.25, ZDrop: 3.0, DeclineFromBase: 0.5, CostRatio: 10, LowScore: 3.0, GapMin: 1.0, GapHigh: 1.5,
+var Default = Thresholds{DeclineFromPeak: 0.8, GapPeriods: 2, DeclineSlope: -0.25, ItemDrop: 2, ZDrop: 3.0, DeclineFromBase: 0.5, CostRatio: 10, LowScore: 3.0, GapMin: 1.0, GapHigh: 1.5,
 	Persist: 2, BlindSelf: 4, BlindOther: 3, Diverge: 0.3, LowDimension: 2.5, InterestDrop: 1.0, NegSentiment: -0.3, MentorLow: 3.0,
 	ShortRatio: 0.25}
 
@@ -121,6 +125,7 @@ var Types = map[string]Catalog{
 	"S13": {"Формальная анкета", "Уточнить, удобна ли анкета и есть ли что обсудить вне её", 7},
 	"S14": {"Негативная обратная связь о второй стороне", "Проведите личную встречу HR 1:1 с автором комментария, уточните обстоятельства и нужную поддержку.", 3},
 	"S15": {"Изменилась оценка задач", "Пересоберите задачи вместе со стажёром и наставником. Зафиксируйте, что сделает следующую задачу понятнее или интереснее.", 5},
+	"S16": {"Снизилась оценка отдельного показателя", "Уточните у автора, что изменилось в этом месяце и какая поддержка нужна.", 5},
 }
 
 // TypeOrder — типы сигналов в порядке каталога.
@@ -159,16 +164,20 @@ type Input struct {
 
 // PairView — динамика пары: ряды по месяцам (индекс 0 = M1), NaN — нет ответа.
 type PairView struct {
-	Pair        survey.Pair           `json:"pair"`
-	InternIndex []float64             `json:"intern_index"` // среднее шкал стажёра (1..5)
-	MentorIndex []float64             `json:"mentor_index"`
-	Questions   map[string][]float64  `json:"questions"`
-	Gaps        map[string][]float64  `json:"gaps"` // код вопроса стажёра → |стажёр − наставник|
-	Sentiment   map[string][]float64  `json:"sentiment"`
-	Themes      map[string][][]string `json:"themes"`
-	Words       map[string][]float64  `json:"-"`
-	Flat        map[string][]bool     `json:"-"` // все шкалы ответа одинаковые
-	AllMax      map[string][]bool     `json:"-"` // все шкалы ответа на максимуме (потолок)
+	AgreementIntern []float64
+	AgreementMentor []float64
+	AgreementNames  []string
+	AgreementCodes  []string
+	Pair            survey.Pair           `json:"pair"`
+	InternIndex     []float64             `json:"intern_index"` // среднее шкал стажёра (1..5)
+	MentorIndex     []float64             `json:"mentor_index"`
+	Questions       map[string][]float64  `json:"questions"`
+	Gaps            map[string][]float64  `json:"gaps"` // код вопроса стажёра → |стажёр − наставник|
+	Sentiment       map[string][]float64  `json:"sentiment"`
+	Themes          map[string][][]string `json:"themes"`
+	Words           map[string][]float64  `json:"-"`
+	Flat            map[string][]bool     `json:"-"` // все шкалы ответа одинаковые
+	AllMax          map[string][]bool     `json:"-"` // все шкалы ответа на максимуме (потолок)
 	// Diff — знаковая разница индексов «стажёр − наставник» по месяцам (Bland–Altman); NaN — нет одной из сторон.
 	Diff         []float64           `json:"diff"`
 	ResponseIDs  map[string][]string `json:"-"`
@@ -257,20 +266,27 @@ func Build(in Input) map[string]*PairView {
 		v.Themes[role][i] = themes
 	}
 	for _, v := range views {
-		for i := range v.Diff {
-			if !math.IsNaN(v.InternIndex[i]) && !math.IsNaN(v.MentorIndex[i]) {
-				v.Diff[i] = v.InternIndex[i] - v.MentorIndex[i]
-			}
-		}
 		for _, q := range in.Survey.ByRole(survey.Intern) {
 			if q.Mirror == "" || q.Kind != "scale" {
 				continue
 			}
 			a, b := v.Questions[q.Code], v.Questions[q.Mirror]
+			// Use one fixed, explicitly mapped question pair throughout the programme.
+			// A raw mean of all role questions mixes different constructs.
+			primary := len(v.AgreementNames) == 0
+			if primary {
+				mirror, _ := in.Survey.Q(q.Mirror)
+				v.AgreementIntern, v.AgreementMentor = a, b
+				v.AgreementNames = []string{q.Text, mirror.Text}
+				v.AgreementCodes = []string{q.Code, mirror.Code}
+			}
 			g := nan()
 			for i := range g {
 				if !math.IsNaN(a[i]) && !math.IsNaN(b[i]) {
 					g[i] = math.Abs(a[i] - b[i])
+					if primary {
+						v.Diff[i] = a[i] - b[i]
+					}
 				}
 			}
 			v.Gaps[q.Code] = g
@@ -293,6 +309,7 @@ func (v *PairView) Cut(cutoff int) *PairView {
 		return out
 	}
 	c := &PairView{Pair: v.Pair, InternIndex: cut(v.InternIndex), MentorIndex: cut(v.MentorIndex), Questions: map[string][]float64{},
+		AgreementIntern: cut(v.AgreementIntern), AgreementMentor: cut(v.AgreementMentor), AgreementNames: v.AgreementNames, AgreementCodes: v.AgreementCodes,
 		Gaps: map[string][]float64{}, Sentiment: map[string][]float64{}, Themes: map[string][][]string{}, Words: map[string][]float64{},
 		Flat: map[string][]bool{}, AllMax: map[string][]bool{}, Diff: cut(v.Diff), ResponseIDs: v.ResponseIDs, CommentCodes: v.CommentCodes}
 	for k, f := range v.Flat {
@@ -429,7 +446,7 @@ func Detect(v *PairView, in Input, cutoff int) []Signal {
 		}
 		a, b := c.Questions[q.Code], c.Questions[q.Mirror]
 		first, last, mg, ok := runOf(a, b, t.Persist, func(x, y float64) bool { return math.Abs(x-y) >= t.GapMin })
-		if !ok || (best != nil && mg <= bestGap) {
+		if !ok || last != cutoff-1 || (best != nil && mg <= bestGap) {
 			continue
 		}
 		sev := Medium
@@ -438,8 +455,8 @@ func Detect(v *PairView, in Input, cutoff int) []Signal {
 		}
 		mq, _ := in.Survey.Q(q.Mirror)
 		s := Signal{Severity: sev, FirstPeriod: first + 1, LastPeriod: last + 1,
-			Explanation: fmt.Sprintf("«%s» (стажёр) и «%s» (наставник) расходятся до %s балла с M%d по M%d (порог %s, не меньше %d мес. подряд)",
-				q.Text, mq.Text, Num(mg), first+1, last+1, Num(t.GapMin), t.Persist),
+			Explanation: fmt.Sprintf("«%s» (стажёр) и «%s» (наставник) расходятся с M%d по M%d, максимум %s. В M%d стажёр — %s, наставник — %s, разница стажёр минус наставник %s. Порог %s, не меньше %d мес. подряд.",
+				q.Text, mq.Text, first+1, last+1, Num(mg), last+1, Num(a[last]), Num(b[last]), NumSigned(a[last]-b[last]), Num(t.GapMin), t.Persist),
 			Evidence: []Evidence{ref("intern", last, q.Code, a[last]), ref("mentor", last, q.Mirror, b[last])}}
 		best, bestGap = &s, mg
 	}
@@ -465,14 +482,16 @@ func Detect(v *PairView, in Input, cutoff int) []Signal {
 	}
 
 	// S5 — разнонаправленные тренды
-	si, ok1 := Slope(c.InternIndex, 3)
-	sm, ok2 := Slope(c.MentorIndex, 3)
+	si, ok1 := Slope(c.AgreementIntern, 3)
+	sm, ok2 := Slope(c.AgreementMentor, 3)
 	// обе стороны должны заметно двигаться: колебания ±0.1 в стабильной паре — не сигнал
 	if ok1 && ok2 && si*sm < 0 && math.Abs(si-sm) >= t.Diverge && math.Abs(si) >= 0.15 && math.Abs(sm) >= 0.15 {
-		last := lastIndex(c.InternIndex)
-		add("S5", Medium, "rules", max(last-1, 1), last+1,
-			fmt.Sprintf("За последние 3 месяца индекс стажёра меняется на %s/мес, а оценка наставника — на %s/мес: стороны движутся в разные стороны", NumSigned(si), NumSigned(sm)),
-			[]Evidence{ref("intern", last, "", c.InternIndex[last])})
+		last := cutoff - 1
+		if !math.IsNaN(c.Diff[last]) {
+			add("S5", Medium, "rules", max(last-1, 1), last+1,
+				fmt.Sprintf("По сопоставимому вопросу «%s» оценка стажёра меняется на %s/мес, оценка наставника по вопросу «%s» — на %s/мес.", c.AgreementNames[0], NumSigned(si), c.AgreementNames[1], NumSigned(sm)),
+				[]Evidence{ref("intern", last, c.AgreementCodes[0], c.AgreementIntern[last]), ref("mentor", last, c.AgreementCodes[1], c.AgreementMentor[last])})
+		}
 	}
 
 	// S6 — низкая поддержка или понятность в текущем месяце (берём самую низкую из двух)
@@ -574,6 +593,24 @@ func Detect(v *PairView, in Input, cutoff int) []Signal {
 		out[len(out)-1].ID += "-" + q.Code
 	}
 
+	// Evaluate each item separately, including a gradual drop on consecutive observations.
+	for _, q := range in.Survey.Questions {
+		if q.Kind != "scale" {
+			continue
+		}
+		values := c.Questions[q.Code][:cutoff]
+		base, onset := itemDropEpisode(values, t.ItemDrop)
+		if onset < 0 {
+			continue
+		}
+		last := len(values) - 1
+		role := string(q.Role)
+		add("S16", Medium, "rules", onset+1, last+1,
+			fmt.Sprintf("«%s»: %s в M%d → %s в M%d. Порог снижения — %s балла.", q.Text, Num(values[base]), base+1, Num(values[last]), last+1, Num(t.ItemDrop)),
+			[]Evidence{ref(role, base, q.Code, values[base]), ref(role, last, q.Code, values[last])})
+		out[len(out)-1].ID += "-" + q.Code
+	}
+
 	// Свежая адресная жалоба даёт повод для личного разговора и без падения оценок.
 	for _, role := range []string{"intern", "mentor"} {
 		now := cutoff - 1
@@ -614,7 +651,7 @@ func Detect(v *PairView, in Input, cutoff int) []Signal {
 		count := map[string][]int{}
 		for i, ts := range c.Themes[role] {
 			for _, th := range uniq(ts) {
-				if tt, ok := textai.ThemeByCode(th); ok && tt.Negative {
+				if tt, ok := textai.ThemeByCode(th); ok && tt.Negative && verifiedQuote(in.Responses, quote(role, i, th)) {
 					count[th] = append(count[th], i)
 				}
 			}
@@ -623,7 +660,7 @@ func Detect(v *PairView, in Input, cutoff int) []Signal {
 		for th, idx := range count {
 			// Старая жалоба с большим числом упоминаний не должна скрыть
 			// свежий повтор по другой теме.
-			if idx[len(idx)-1]+1 < cutoff-1 {
+			if idx[len(idx)-1]+1 != cutoff {
 				continue
 			}
 			if len(idx) > bestN || (len(idx) == bestN && th < bestTheme) {

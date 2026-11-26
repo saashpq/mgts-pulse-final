@@ -1,0 +1,236 @@
+{
+  "title": "Пульс стажировки · синтетический пример",
+  "periods": 6,
+  "pairs": [
+    {
+      "id": "P1",
+      "intern": "DEMO-I1",
+      "mentor": "DEMO-M1",
+      "track": "Учебная группа 1"
+    },
+    {
+      "id": "P2",
+      "intern": "DEMO-I2",
+      "mentor": "DEMO-M2",
+      "track": "Учебная группа 2"
+    },
+    {
+      "id": "P3",
+      "intern": "DEMO-I3",
+      "mentor": "DEMO-M3",
+      "track": "Учебная группа 3"
+    },
+    {
+      "id": "P4",
+      "intern": "DEMO-I4",
+      "mentor": "DEMO-M4",
+      "track": "Учебная группа 4"
+    },
+    {
+      "id": "P5",
+      "intern": "DEMO-I5",
+      "mentor": "DEMO-M5",
+      "track": "Учебная группа 5"
+    },
+    {
+      "id": "P6",
+      "intern": "Демо-стажёр",
+      "mentor": "Демо-наставник",
+      "track": "Демо"
+    }
+  ],
+  "questions": [
+    {
+      "code": "i_clarity",
+      "role": "intern",
+      "text": "Я понимаю результат текущей задачи",
+      "kind": "scale",
+      "max": 5,
+      "dimension": "clarity",
+      "aliases": [
+        "i_clarity"
+      ],
+      "mirror": "m_understanding"
+    },
+    {
+      "code": "i_support",
+      "role": "intern",
+      "text": "Обратная связь приходит вовремя",
+      "kind": "scale",
+      "max": 5,
+      "dimension": "support",
+      "aliases": [
+        "i_support"
+      ]
+    },
+    {
+      "code": "i_load",
+      "role": "intern",
+      "text": "Мне подходит объём работы",
+      "kind": "scale",
+      "max": 5,
+      "dimension": "workload",
+      "aliases": [
+        "i_load"
+      ]
+    },
+    {
+      "code": "i_interest",
+      "role": "intern",
+      "text": "Задачи сохраняют мой интерес",
+      "kind": "scale",
+      "max": 5,
+      "dimension": "interest",
+      "aliases": [
+        "i_interest"
+      ]
+    },
+    {
+      "code": "i_development",
+      "role": "intern",
+      "text": "Я осваиваю новые навыки",
+      "kind": "scale",
+      "max": 5,
+      "dimension": "development",
+      "aliases": [
+        "i_development"
+      ]
+    },
+    {
+      "code": "i_team",
+      "role": "intern",
+      "text": "Мне легко обратиться к коллегам",
+      "kind": "scale",
+      "max": 5,
+      "dimension": "team",
+      "aliases": [
+        "i_team"
+      ]
+    },
+    {
+      "code": "i_overall",
+      "role": "intern",
+      "text": "Моя оценка опыта за этот месяц",
+      "kind": "scale",
+      "max": 5,
+      "dimension": "satisfaction",
+      "aliases": [
+        "i_overall"
+      ]
+    },
+    {
+      "code": "i_comment",
+      "role": "intern",
+      "text": "Что произошло за месяц?",
+      "kind": "text",
+      "aliases": [
+        "i_comment"
+      ]
+    },
+    {
+      "code": "i_barrier",
+      "role": "intern",
+      "text": "Что стоит обсудить с куратором?",
+      "kind": "text",
+      "aliases": [
+        "i_barrier"
+      ]
+    },
+    {
+      "code": "m_understanding",
+      "role": "mentor",
+      "text": "Участник понимает ожидаемый результат",
+      "kind": "scale",
+      "max": 5,
+      "dimension": "clarity",
+      "aliases": [
+        "m_understanding"
+      ],
+      "mirror": "i_clarity"
+    },
+    {
+      "code": "m_quality",
+      "role": "mentor",
+      "text": "Результат соответствует договорённостям",
+      "kind": "scale",
+      "max": 5,
+      "dimension": "performance",
+      "aliases": [
+        "m_quality"
+      ]
+    },
+    {
+      "code": "m_autonomy",
+      "role": "mentor",
+      "text": "Участник справляется самостоятельно",
+      "kind": "scale",
+      "max": 5,
+      "dimension": "autonomy",
+      "aliases": [
+        "m_autonomy"
+      ]
+    },
+    {
+      "code": "m_speed",
+      "role": "mentor",
+      "text": "Участник укладывается в сроки",
+      "kind": "scale",
+      "max": 5,
+      "dimension": "speed",
+      "aliases": [
+        "m_speed"
+      ]
+    },
+    {
+      "code": "m_initiative",
+      "role": "mentor",
+      "text": "Участник предлагает следующие шаги",
+      "kind": "scale",
+      "max": 5,
+      "dimension": "initiative",
+      "aliases": [
+        "m_initiative"
+      ]
+    },
+    {
+      "code": "m_team",
+      "role": "mentor",
+      "text": "Участник взаимодействует с коллегами",
+      "kind": "scale",
+      "max": 5,
+      "dimension": "team",
+      "aliases": [
+        "m_team"
+      ]
+    },
+    {
+      "code": "m_comment",
+      "role": "mentor",
+      "text": "Что произошло за месяц?",
+      "kind": "text",
+      "aliases": [
+        "m_comment"
+      ]
+    },
+    {
+      "code": "m_barrier",
+      "role": "mentor",
+      "text": "Что стоит обсудить с куратором?",
+      "kind": "text",
+      "aliases": [
+        "m_barrier"
+      ]
+    }
+  ],
+  "id_columns": {
+    "intern": [
+      "intern_id"
+    ],
+    "mentor": [
+      "mentor_id"
+    ],
+    "period": [
+      "period"
+    ]
+  }
+}

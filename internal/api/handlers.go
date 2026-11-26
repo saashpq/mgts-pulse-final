@@ -134,6 +134,7 @@ type questionSeries struct {
 	Dimension string     `json:"dimension"`
 	Mirror    string     `json:"mirror,omitempty"`
 	Values    []*float64 `json:"values"`
+	Deltas    []*float64 `json:"deltas"`
 }
 
 // pair — карточка пары: динамика по вопросам, расхождения, сигналы, комментарии с разбором и исходные ответы.
@@ -158,7 +159,15 @@ func (a *App) pair(w http.ResponseWriter, r *http.Request) {
 		if q.Kind != "scale" {
 			continue
 		}
-		qs = append(qs, questionSeries{Code: q.Code, Role: string(q.Role), Text: q.Text, Dimension: q.Dimension, Mirror: q.Mirror, Values: ptrs(v.Questions[q.Code])})
+		values := ptrs(v.Questions[q.Code])
+		deltas := make([]*float64, len(values))
+		for i := 1; i < len(values); i++ {
+			if values[i] != nil && values[i-1] != nil {
+				delta := math.Round((*values[i]-*values[i-1])*100) / 100
+				deltas[i] = &delta
+			}
+		}
+		qs = append(qs, questionSeries{Code: q.Code, Role: string(q.Role), Text: q.Text, Dimension: q.Dimension, Mirror: q.Mirror, Values: values, Deltas: deltas})
 	}
 	comments := []commentView{}
 	responses := []survey.Response{}
@@ -183,7 +192,7 @@ func (a *App) pair(w http.ResponseWriter, r *http.Request) {
 		return comments[i].Role < comments[j].Role
 	})
 	writeJSON(w, 200, map[string]any{"report": pr, "current": rep.Current, "periods": rep.Periods, "low_score": rep.LowScore, "questions": qs,
-		"comments": comments, "responses": responses, "themes": themeLabels()})
+		"comments": comments, "responses": responses, "response_versions": a.Store.ResponseVersions(id), "themes": themeLabels()})
 }
 
 func themeLabels() map[string]map[string]any {
@@ -348,6 +357,7 @@ func (a *App) putThresholds(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	bad := t.DeclineSlope >= 0 || t.DeclineSlope < -2 || t.ZDrop < 1 || t.ZDrop > 5 ||
+		t.ItemDrop <= 0 || t.ItemDrop > 4 ||
 		t.DeclineFromBase < 0.1 || t.DeclineFromBase > 2 || t.CostRatio < 0.5 || t.CostRatio > 100 || t.LowScore < 1 || t.LowScore > 5 ||
 		t.GapMin <= 0 || t.GapHigh < t.GapMin || t.GapHigh > 4 || t.Persist < 1 || t.Persist > 6 || t.BlindSelf < 1 || t.BlindSelf > 5 ||
 		t.BlindOther < 1 || t.BlindOther > 5 || t.Diverge <= 0 || t.LowDimension < 1 || t.LowDimension > 5 || t.InterestDrop <= 0 ||

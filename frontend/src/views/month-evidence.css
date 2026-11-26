@@ -27,3 +27,4 @@
 @media (forced-colors: active) {
   .month-evidence .month-evidence__role :is(:target, [data-linked-answer]) { border-inline-start-color: Highlight; }
 }
+.month-delta {display:block;font-weight:500;font-size:.78em;color:var(--muted,#4b6076);white-space:nowrap}

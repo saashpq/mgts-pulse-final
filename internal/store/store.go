@@ -30,15 +30,16 @@ type Event struct {
 }
 
 type state struct {
-	FormWindow *FormWindow                `json:"form_window,omitempty"`
-	Survey     survey.Survey              `json:"survey"`
-	Responses  map[string]survey.Response `json:"responses"`
-	Analyses   map[string]textai.Analysis `json:"analyses"`
-	Verdicts   map[string]signals.Verdict `json:"verdicts"`
-	Thresholds signals.Thresholds         `json:"thresholds"`
-	Tokens     map[string]string          `json:"tokens"` // токен ссылки на анкету → ID участника
-	Events     []Event                    `json:"events"`
-	Deliveries []string                   `json:"deliveries,omitempty"` // последние X-Delivery-Id вебхука (FIFO)
+	FormWindow *FormWindow                  `json:"form_window,omitempty"`
+	Survey     survey.Survey                `json:"survey"`
+	Responses  map[string]survey.Response   `json:"responses"`
+	Previous   map[string][]survey.Response `json:"previous_responses,omitempty"` // Superseded versions, oldest first.
+	Analyses   map[string]textai.Analysis   `json:"analyses"`
+	Verdicts   map[string]signals.Verdict   `json:"verdicts"`
+	Thresholds signals.Thresholds           `json:"thresholds"`
+	Tokens     map[string]string            `json:"tokens"` // токен ссылки на анкету → ID участника
+	Events     []Event                      `json:"events"`
+	Deliveries []string                     `json:"deliveries,omitempty"` // последние X-Delivery-Id вебхука (FIFO)
 }
 
 // MaxDeliveries — сколько последних ID доставки вебхука помнить для отсева повторов.
@@ -239,6 +240,10 @@ func (s *Store) upsertLocked(rs []survey.Response, source, note string) ([]strin
 		ok bool
 	}
 	backup := map[string]prev{}
+	previous := s.st.Previous
+	if len(rs) > 0 {
+		s.st.Previous = copyMap(previous)
+	}
 	events := s.st.Events
 	var changed []string
 	for _, r := range rs {
@@ -259,6 +264,8 @@ func (s *Store) upsertLocked(rs []survey.Response, source, note string) ([]strin
 			if same(old, r) && (r.Source != "yandex-forms" || old.Source == r.Source) {
 				continue
 			}
+			versions := s.st.Previous[r.ID]
+			s.st.Previous[r.ID] = append(versions[:len(versions):len(versions)], old)
 		}
 		if _, seen := backup[r.ID]; !seen {
 			old, ok := s.st.Responses[r.ID]
@@ -282,9 +289,24 @@ func (s *Store) upsertLocked(rs []survey.Response, source, note string) ([]strin
 			}
 		}
 		s.st.Events = events
+		s.st.Previous = previous
 		return nil, err
 	}
 	return changed, nil
+}
+
+// ResponseVersions returns a pair's responses in arrival order. The last element
+// of each list is the sole version used in calculations and participation counts.
+func (s *Store) ResponseVersions(pair string) map[string][]survey.Response {
+	s.mu.RLock()
+	defer s.mu.RUnlock()
+	out := map[string][]survey.Response{}
+	for id, current := range s.st.Responses {
+		if current.PairID == pair {
+			out[id] = append(slices.Clone(s.st.Previous[id]), current)
+		}
+	}
+	return out
 }
 
 func merge(old, upd survey.Response) survey.Response {
@@ -380,7 +402,10 @@ func (s *Store) SetAnalyses(m map[string]textai.Analysis) error {
 }
 
 // PendingItem — комментарий, ожидающий разбора моделью.
-type PendingItem struct{ Key, Text, Role string }
+type PendingItem struct {
+	Key, Text, Role string
+	Period          int
+}
 
 // Pending — комментарии, у которых разбор помечен заметкой note (например, «ожидает разбора моделью»).
 func (s *Store) Pending(note string) []PendingItem {
@@ -391,7 +416,7 @@ func (s *Store) Pending(note string) []PendingItem {
 		for code, text := range r.Comments {
 			key := r.ID + "/" + code
 			if a, ok := s.st.Analyses[key]; ok && a.Note == note {
-				out = append(out, PendingItem{Key: key, Text: text, Role: string(r.Role)})
+				out = append(out, PendingItem{Key: key, Text: text, Role: string(r.Role), Period: r.Period})
 			}
 		}
 	}

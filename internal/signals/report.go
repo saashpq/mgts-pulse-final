@@ -25,6 +25,7 @@ type Verdict struct {
 type SignalView struct {
 	Episode int `json:"episode,omitempty"` // Начало текущего непрерывного эпизода в месяцах.
 	Signal
+	Lifecycle string   `json:"lifecycle"`  // active | resolved — presence of the rule, independent of HR's verdict.
 	FirstSeen int      `json:"first_seen"` // месяц, когда сигнал впервые появился бы у HR
 	Verdict   *Verdict `json:"verdict,omitempty"`
 	// Primary — главный сигнал пары (в своём списке: активные или снятые); Related — ID остальных сигналов этого списка,
@@ -39,18 +40,23 @@ type SignalView struct {
 }
 
 type PairReport struct {
-	PairID        string       `json:"pair"`
-	Intern        string       `json:"intern"`
-	Mentor        string       `json:"mentor"`
-	Track         string       `json:"track,omitempty"`
-	Status        string       `json:"status"` // attention | watch | ok
-	Headline      string       `json:"headline"`
-	Signals       []SignalView `json:"signals"`        // активные на текущий месяц
-	Resolved      []SignalView `json:"resolved"`       // были раньше, сейчас не срабатывают
-	History       []string     `json:"history"`        // максимальная критичность по месяцам: high|medium|low|""
-	ProblemAlerts []bool       `json:"problem_alerts"` // Содержательная тревога по данным, доступным к концу месяца, до решений HR.
-	InternIndex   []*float64   `json:"intern_index"`
-	MentorIndex   []*float64   `json:"mentor_index"`
+	AgreementIntern []*float64          `json:"agreement_intern"`
+	AgreementMentor []*float64          `json:"agreement_mentor"`
+	AgreementNames  []string            `json:"agreement_questions"`
+	ResponseIDs     map[string][]string `json:"response_ids"`
+	MonthReasons    []string            `json:"month_reasons"`
+	PairID          string              `json:"pair"`
+	Intern          string              `json:"intern"`
+	Mentor          string              `json:"mentor"`
+	Track           string              `json:"track,omitempty"`
+	Status          string              `json:"status"` // attention | watch | ok
+	Headline        string              `json:"headline"`
+	Signals         []SignalView        `json:"signals"`        // активные на текущий месяц
+	Resolved        []SignalView        `json:"resolved"`       // были раньше, сейчас не срабатывают
+	History         []string            `json:"history"`        // максимальная критичность по месяцам: high|medium|low|""
+	ProblemAlerts   []bool              `json:"problem_alerts"` // Содержательная тревога по данным, доступным к концу месяца, до решений HR.
+	InternIndex     []*float64          `json:"intern_index"`
+	MentorIndex     []*float64          `json:"mentor_index"`
 	// Detection — когда проблему заметила система и когда её заметило бы простое правило «средняя оценка < 3».
 	Detection Detection `json:"detection"`
 	Summary   string    `json:"summary"`
@@ -214,6 +220,8 @@ func Analyze(in Input, verdicts map[string]Verdict) ProgramReport {
 	for _, p := range in.Survey.Participant {
 		v := views[p.ID]
 		pr := PairReport{PairID: p.ID, Intern: p.Intern, Mentor: p.Mentor, Track: p.Track, Status: "ok",
+			ResponseIDs: v.ResponseIDs, MonthReasons: make([]string, in.Survey.Periods),
+			AgreementIntern: ptrs(v.AgreementIntern), AgreementMentor: ptrs(v.AgreementMentor), AgreementNames: v.AgreementNames,
 			History: make([]string, in.Survey.Periods), ProblemAlerts: make([]bool, current), InternIndex: ptrs(v.InternIndex), MentorIndex: ptrs(v.MentorIndex),
 			Signals: []SignalView{}, Resolved: []SignalView{}}
 		firstSeen := map[string]int{}
@@ -251,6 +259,7 @@ func Analyze(in Input, verdicts map[string]Verdict) ProgramReport {
 				if s.LastPeriod == cut && sevRank(s.Severity) > sevRank(Severity(pr.History[cut-1])) {
 					if vd := verdictFor(s.ID); vd == nil || vd.Status != "false" || vd.Period > cut {
 						pr.History[cut-1] = string(s.Severity)
+						pr.MonthReasons[cut-1] = s.Title
 					}
 				}
 			}
@@ -258,7 +267,7 @@ func Analyze(in Input, verdicts map[string]Verdict) ProgramReport {
 		active := map[string]bool{}
 		for _, s := range Detect(v, inAt(current), current) {
 			active[s.ID] = true
-			sv := SignalView{Signal: s, FirstSeen: firstSeen[s.ID], Verdict: verdictFor(s.ID)}
+			sv := SignalView{Signal: s, Lifecycle: "active", FirstSeen: firstSeen[s.ID], Verdict: verdictFor(s.ID)}
 			seenAt(&sv, episodeStart[s.ID])
 			rep.Effect.ActiveSignals++
 			if sv.Verdict != nil {
@@ -277,6 +286,7 @@ func Analyze(in Input, verdicts map[string]Verdict) ProgramReport {
 		}
 		for id, sv := range lastSeen {
 			if !active[id] {
+				sv.Lifecycle = "resolved"
 				sv.FirstSeen = firstSeen[id]
 				sv.Verdict = verdictFor(id)
 				seenAt(&sv, episodeStart[id])

@@ -177,12 +177,54 @@ func receive(w http.ResponseWriter, r *http.Request) {
 	}
 	w.WriteHeader(200)
 }
+
+// Keep the two questionnaires aligned with the roster that validates submissions.
+// The live demonstration runs against its own roster and copy of the response history.
+func questionnaire(name string) ([]byte, error) {
+	raw, err := assets.ReadFile("public/" + name)
+	if err != nil {
+		return nil, err
+	}
+	var model map[string]any
+	if err := json.Unmarshal(raw, &model); err != nil {
+		return nil, err
+	}
+	fields, _ := model["elements"].([]any)
+	for _, item := range fields {
+		field, ok := item.(map[string]any)
+		if !ok {
+			continue
+		}
+		code, _ := field["name"].(string)
+		if code != "intern_id" && code != "mentor_id" && code != "track" {
+			continue
+		}
+		seen := map[string]bool{}
+		choices := []string{}
+		for _, pair := range schema.Pairs {
+			value := pair.Track
+			switch code {
+			case "intern_id":
+				value = pair.Intern
+			case "mentor_id":
+				value = pair.Mentor
+			}
+			if value != "" && !seen[value] {
+				choices = append(choices, value)
+				seen[value] = true
+			}
+		}
+		field["choices"] = choices
+	}
+	return json.Marshal(model)
+}
+
 func main() {
 	secret = os.Getenv("WEBHOOK_SECRET")
 	if secret == "" {
 		log.Fatal("Use start.bat to start both services.")
 	}
-	b, err := os.ReadFile("data/survey.json")
+	b, err := os.ReadFile(setting("SURVEY_FILE", "data/survey.json"))
 	if err != nil || json.Unmarshal(b, &schema) != nil {
 		log.Fatal("Missing survey configuration")
 	}
@@ -216,6 +258,16 @@ func main() {
 	http.HandleFunc("/submit", receive)
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		name := strings.TrimPrefix(r.URL.Path, "/")
+		if name == "intern.json" || name == "mentor.json" {
+			data, err := questionnaire(name)
+			if err != nil {
+				http.Error(w, "Анкета недоступна", http.StatusInternalServerError)
+				return
+			}
+			w.Header().Set("Content-Type", "application/json; charset=utf-8")
+			w.Write(data)
+			return
+		}
 		if name == "" || name == "intern" || name == "mentor" {
 			name = "index.html"
 		}

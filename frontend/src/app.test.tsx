@@ -18,6 +18,11 @@ const pair = {
   resolved: [], history: ['', '', 'high', 'high', 'high', 'high'], intern_index: [4.75, 4.75, 4.25, 3.75, 3.25, 3.13],
   mentor_index: [5, 5, 5, 5, 4.5, 4.5], detection: { ours: 3, naive: 0 }, summary: 'Пара P2: потеря мотивации',
 };
+const pairedClarity = {
+  agreement_questions: ['Понятность задач', 'Понимание задач и ожиданий'],
+  agreement_intern: [5, 5, 5, 4, 4, 5],
+  agreement_mentor: [3, 3, 4, 3, 2, 3],
+};
 const solvedPair = {
   ...pair, pair: 'P5', intern: 'I-05', mentor: 'M-05', status: 'ok', headline: 'Пропуск анкеты', signals: [], history: ['', '', 'high', 'high', 'low', 'low'],
   detection: { ours: 3, naive: 3 }, summary: 'Пара P5',
@@ -905,7 +910,9 @@ test.each([
 });
 
 test('экран «Качество системы»: метрики с интервалами, сравнение с правилом, шкалы, согласие, ИИ, действия; оговорка видна', async () => {
-  patchResponses((url, body) => (url.includes('/overview') ? { ...body, report: { ...body.report, quality, actions } } : undefined));
+  patchResponses((url, body) => (url.includes('/overview') ? {
+    ...body, report: { ...body.report, quality, actions, pairs: body.report.pairs.map((p: PairReport) => ({ ...p, ...pairedClarity })) },
+  } : undefined));
   window.history.pushState(null, '', '/');
   wrap(<App />);
   await userEvent.click(await screen.findByRole('button', { name: 'Качество системы' }));
@@ -1028,7 +1035,7 @@ test('карточка пары: согласие сторон со знаком
     if (url.includes('/pairs/') && !url.includes('/brief')) {
       const s1 = { ...body.report.signals[1], explanation: 'z = −3.4 к собственной базе 4.5', evidence: [] };
       const s7 = { ...body.report.signals[0], evidence: [{ ...body.report.signals[0].evidence[0], analyzer: 'llm:qwen2.5' }] };
-      return { ...body, report: { ...body.report, signals: [s7, s1, ...body.report.signals.slice(2)], agreement: { bias: 1.75, sd: 0.4, loa_lo: 0.97, loa_hi: 2.53, n: 6 } } };
+      return { ...body, report: { ...body.report, ...pairedClarity, signals: [s7, s1, ...body.report.signals.slice(2)], agreement: { bias: 1.75, sd: 0.4, loa_lo: 0.97, loa_hi: 2.53, n: 6 } } };
     }
     return undefined;
   });
@@ -1053,7 +1060,7 @@ test('карточка пары без agreement и actions (старый сни
   window.history.pushState(null, '', '/pairs/P2');
   wrap(<App />);
   const agree = await screen.findByRole('region', { name: 'Согласие сторон' });
-  expect(within(agree).getByText(/Нет данных: сервер не прислал расчёт согласия/)).toBeInTheDocument();
+  expect(within(agree).getByText(/Для расчёта нужны ответы на сопоставимые вопросы/)).toBeInTheDocument();
   expect(screen.queryByRole('region', { name: 'Что уже сделано и что изменилось' })).toBeNull();
   expect(screen.getAllByText('цитату выделил: словарь тем').length).toBeGreaterThan(0);
 });

@@ -52,6 +52,8 @@ export interface Signal {
 }
 
 export interface PairReport {
+  response_ids?: Record<'intern' | 'mentor', string[]>;
+  month_reasons?: string[];
   pair: string;
   intern: string;
   mentor: string;
@@ -63,6 +65,9 @@ export interface PairReport {
   history: (Severity | '')[];
   intern_index: Num[];
   mentor_index: Num[];
+  agreement_intern?: Num[];
+  agreement_mentor?: Num[];
+  agreement_questions?: string[];
   detection: { ours: number; naive: number };
   summary: string;
   /** согласие сторон по паре: смещение стажёр − наставник (R4) */
@@ -183,6 +188,8 @@ export interface AnalyzerInfo {
 }
 
 export interface Analysis {
+  hr_question?: string;
+  source?: { response_id: string; question: string; period: number; role: string };
   sentiment: number;
   themes: string[];
   quote: string;
@@ -202,6 +209,7 @@ export interface Comment {
 }
 
 export interface QuestionSeries {
+  deltas?: Num[];
   code: string;
   role: 'intern' | 'mentor';
   text: string;
@@ -211,6 +219,8 @@ export interface QuestionSeries {
 }
 
 export interface PairDetail {
+  responses?: { id: string; role: 'intern' | 'mentor'; period: number }[];
+  response_versions?: Record<string, unknown[]>;
   low_score?: number;
   report: PairReport;
   current: number;

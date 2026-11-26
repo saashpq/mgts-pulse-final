@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
-import { api, type Overview as OverviewData } from '../api';
+import { api, type Overview as OverviewData, type PairReport } from '../api';
 import { LineChart, Sparkline } from '../components/charts';
 import { ThemeMatrix } from '../components/ThemeMatrix';
 import { PriorityCase } from '../components/PriorityCase';
@@ -11,12 +11,18 @@ import { navigate, pairMonthPath, pairPath } from '../router';
 import { CopyButton, Loading, Failure } from './common';
 
 /** Главный экран HR: кто требует вмешательства, как идёт программа, тепловая карта сигналов по месяцам. */
+function submitted(pair: PairReport, role: 'intern' | 'mentor', month: number) {
+  return pair.response_ids ? Boolean(pair.response_ids[role]?.[month - 1]) : pair[role === 'intern' ? 'intern_index' : 'mentor_index'][month - 1] != null;
+}
+
 export function Overview({ report = false }: { report?: boolean }) {
   const q = useQuery({ queryKey: ['overview'], queryFn: api.overview });
   const [pairStatus, setPairStatus] = useState('all');
+  const [selectedMonth, setSelectedMonth] = useState<number>();
   if (q.isPending) return <Loading />;
   if (q.isError) return <Failure error={q.error} onRetry={() => q.refetch()} />;
   const r = q.data.report;
+  const month = Math.min(selectedMonth ?? r.current, r.current);
   if (r.current === 0)
     return (
       <section className="sheet">
@@ -40,7 +46,11 @@ export function Overview({ report = false }: { report?: boolean }) {
           <span className="sheet__meta">Месяц {r.current} из {r.periods}</span>
         </div>
         <div className="overview-queue-tools">
-          <label>Статус <select aria-label="Статус пары" value={pairStatus} onChange={event => setPairStatus(event.target.value)}>
+          <label>Ответы за <select aria-label="Месяц участия" value={month} onChange={event => setSelectedMonth(Number(event.target.value))}>
+            {Array.from({length:r.current}, (_, i) => <option key={i} value={i + 1}>Месяц {i + 1}</option>)}
+          </select></label>
+          <span aria-live="polite">Стажёры {r.pairs.filter(p => submitted(p, 'intern', month)).length}/{r.pairs.length} · Наставники {r.pairs.filter(p => submitted(p, 'mentor', month)).length}/{r.pairs.length}</span>
+          <label>Статус сейчас <select aria-label="Статус пары" value={pairStatus} onChange={event => setPairStatus(event.target.value)}>
             <option value="all">Все пары ({r.pairs.length})</option>
             <option value="attention">Требуют вмешательства ({r.attention})</option>
             <option value="watch">Под наблюдением ({r.watch})</option>
@@ -74,6 +84,10 @@ export function Overview({ report = false }: { report?: boolean }) {
                     {p.intern} · {p.mentor}
                     {p.track ? ` · ${p.track}` : ''}
                   </div>
+                  <button className="btn btn--link" type="button" onClick={event => {event.stopPropagation(); navigate(pairMonthPath(p.pair, month));}}>
+                    М{month} · {submitted(p, 'intern', month) ? 'Стажёр ответил' : 'Ждём стажёра'} · {submitted(p, 'mentor', month) ? 'Наставник ответил' : 'Ждём наставника'}
+                  </button>
+                  {month !== r.current && p.month_reasons?.[month - 1] && <p className="muted">{p.month_reasons[month - 1]}</p>}
                 </td>
                 <td>
                   <span className={`status status--${p.status}`}>{STATUS_TEXT[p.status]}</span>
@@ -83,7 +97,8 @@ export function Overview({ report = false }: { report?: boolean }) {
                 </td>
                 {p.history.map((h, i) => {
                   const future = i + 1 > r.current;
-                  const text = future ? 'ещё не наступил' : h ? SEVERITY_TEXT[h] : 'без сигналов';
+                  const empty = !submitted(p, 'intern', i + 1) && !submitted(p, 'mentor', i + 1);
+                  const text = future ? 'ещё не наступил' : empty ? 'нет анкет' : h ? SEVERITY_TEXT[h] : 'без сигналов';
                   return (
                     <td key={i} className="pairs__m" data-month={`M${i + 1}`}>
                       <button
@@ -93,7 +108,7 @@ export function Overview({ report = false }: { report?: boolean }) {
                         title={`M${i + 1}: ${text}`}
                         aria-label={`${p.pair}, M${i + 1}: ${text}`}
                       >
-                        {h ? SEVERITY_MARK[h] : ''}
+                        {future ? '' : empty ? '—' : h ? SEVERITY_MARK[h] : ''}
                       </button>
                     </td>
                   );

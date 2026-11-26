@@ -1,14 +1,24 @@
+param([switch]$Demo)
 $ErrorActionPreference = 'Stop'
 Set-Location -LiteralPath $PSScriptRoot
 $env:WEBHOOK_SECRET = [guid]::NewGuid().ToString('N') + [guid]::NewGuid().ToString('N')
-$env:ADDR = '127.0.0.1:8260'
-$env:PUBLIC_URL = 'http://127.0.0.1:8260'
+$port = if ($Demo) {8270} else {8260}
+$env:ADDR = "127.0.0.1:$port"
+$env:PUBLIC_URL = "http://$env:ADDR"
 $env:PULSE_ENDPOINT = $env:PUBLIC_URL
-$env:FORMS_ADDR = '127.0.0.1:8261'
+$env:FORMS_ADDR = "127.0.0.1:$($port+1)"
 $env:SEED_SYNTHETIC = 'false'
 $env:DEMO_MODE = 'false'
 $env:WEB_DIR = 'web'
 $env:STATE_FILE = 'runtime/state.json'
+$formsDir = $PSScriptRoot
+$env:SURVEY_FILE = (Resolve-Path -LiteralPath 'data/survey.json').Path
+if ($Demo) {
+    $formsDir = Join-Path $PSScriptRoot ('runtime/rehearsals/' + [guid]::NewGuid().ToString('N'))
+    New-Item -ItemType Directory -Force -Path $formsDir | Out-Null
+    $env:SURVEY_FILE = (Resolve-Path -LiteralPath 'data/demo-survey.json').Path
+    $env:STATE_FILE = Join-Path $formsDir 'state.json'
+}
 $first = !(Test-Path $env:STATE_FILE)
 $pulse = Start-Process .\pulse.exe -WorkingDirectory $PSScriptRoot -WindowStyle Hidden -PassThru
 $forms = $null
@@ -27,8 +37,9 @@ try {
             if ($LASTEXITCODE -ne 0) {throw "Sample import failed: $role"}
         }
     }
-    $forms = Start-Process .\forms-service.exe -WorkingDirectory $PSScriptRoot -WindowStyle Hidden -PassThru
-    Write-Host 'Dashboard: http://127.0.0.1:8260   Forms: http://127.0.0.1:8261'
+    $forms = Start-Process (Join-Path $PSScriptRoot 'forms-service.exe') -WorkingDirectory $formsDir -WindowStyle Hidden -PassThru
+    Write-Host "Dashboard: $env:PUBLIC_URL   Forms: http://$env:FORMS_ADDR"
+    if ($Demo) { Write-Host "Open $env:PUBLIC_URL/pairs/P6/months/6 for the 60 -> 61 -> 62 demonstration." }
     $pulse.WaitForExit()
 } finally {
     foreach ($p in @($forms,$pulse)) {if ($p -and !$p.HasExited) {$p.Kill(); $p.WaitForExit()}}

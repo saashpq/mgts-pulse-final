@@ -50,6 +50,7 @@ const llmBatch = 16
 
 type job struct {
 	key, text, role string
+	period          int
 }
 
 // New собирает приложение. llmClient nil — только офлайн-анализатор.
@@ -136,7 +137,9 @@ drain:
 			continue
 		}
 		start := time.Now()
-		an := a.LLM.Analyze(ctx, j.text, j.role)
+		responseID, question, _ := strings.Cut(j.key, "/")
+		source := textai.Source{ResponseID: responseID, Question: question, Role: j.role, Period: j.period}
+		an := a.LLM.Analyze(textai.WithSource(ctx, source), j.text, j.role)
 		a.Metrics.Add("pulse_llm_seconds_sum", "Время разбора комментариев моделью", time.Since(start).Seconds())
 		a.Metrics.Inc("pulse_llm_analyses_total", "Разборы комментариев моделью", "result", resultLabel(an))
 		if current(j) {
@@ -189,7 +192,7 @@ func (a *App) refill() int {
 		if inQueue {
 			continue
 		}
-		if !a.enqueue(job{key: p.Key, text: p.Text, role: p.Role}) {
+		if !a.enqueue(job{key: p.Key, text: p.Text, role: p.Role, period: p.Period}) {
 			break
 		}
 		n++
@@ -247,9 +250,10 @@ func (a *App) analyze(ids []string) {
 		for code, text := range r.Comments {
 			key := r.ID + "/" + code
 			res := a.Offline.Analyze(context.Background(), text, string(r.Role))
+			res.Source = &textai.Source{ResponseID: r.ID, Question: code, Role: string(r.Role), Period: r.Period}
 			if a.LLM != nil {
 				res.Note = PendingNote
-				jobs = append(jobs, job{key: key, text: text, role: string(r.Role)})
+				jobs = append(jobs, job{key: key, text: text, role: string(r.Role), period: r.Period})
 			}
 			offline[key] = res
 		}

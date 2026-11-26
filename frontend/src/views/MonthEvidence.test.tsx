@@ -30,9 +30,9 @@ test('за выбранный месяц выводятся вопросы, от
 });
 
 test('пустая анкета и будущий месяц показывают свой статус, без соседних оценок', () => {
-  const sparse: PairDetail = { ...sample, current: 3, comments: [], questions: sample.questions.map(q => ({ ...q, values: [5, null, 2] })) };
+  const sparse: PairDetail = { ...sample, responses: [], current: 3, comments: [], questions: sample.questions.map(q => ({ ...q, values: [5, null, 2] })) };
   const ui = render(<MonthEvidence detail={sparse} month={2} />);
-  expect(screen.getAllByText('За M2 нет оценок и комментариев.')).toHaveLength(2);
+  expect(screen.getAllByText('Анкета за M2 не поступила.')).toHaveLength(2);
   ui.rerender(<MonthEvidence detail={sparse} month={4} />);
   expect(screen.getByText(/позже текущего отчётного периода/)).toBeVisible();
   expect(screen.queryByText(sample.questions[0].text)).toBeNull();

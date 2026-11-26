@@ -52,6 +52,7 @@ export const FIELDS: Field[] = [
     max: 2,
   },
   { key: 'low_score', label: 'Ниже этой оценки — критично', step: 0.1, signal: 'S1, S2' },
+  { key: 'item_drop', label: 'Снижение отдельного показателя от исходного уровня, баллы', step: 0.5, min: 0.5, max: 4, signal: 'S16' },
   { key: 'gap_min', label: 'Расхождение стажёра и наставника', step: 0.1, signal: 'S3' },
   { key: 'gap_high', label: 'Критичное расхождение', step: 0.1, signal: 'S3' },
   { key: 'persist', label: 'Сколько месяцев подряд, чтобы это был не шум', step: 1, signal: 'S3, S4, S8' },
@@ -66,7 +67,7 @@ export const FIELDS: Field[] = [
 ];
 
 const groups = [
-  { title: 'Снижение оценок', keys: ['z_drop', 'decline_slope', 'decline_from_base', 'low_score'] },
+  { title: 'Снижение оценок', keys: ['z_drop', 'decline_slope', 'decline_from_base', 'low_score', 'item_drop'] },
   { title: 'Расхождения между стажёром и наставником', keys: ['gap_min', 'gap_high', 'blind_self', 'blind_other', 'diverge'] },
   { title: 'Поддержка, интерес и обратная связь', keys: ['low_dimension', 'interest_drop', 'neg_sentiment', 'mentor_low', 'short_ratio'] },
   { title: 'Длительность сигнала', keys: ['persist'] },

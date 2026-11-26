@@ -111,7 +111,7 @@ export function PairView({ id, month }: { id: string; month?: number }) {
         })}
       </div>
 
-      <AgreementBlock a={p.agreement} intern={p.intern_index} mentor={p.mentor_index} />
+      <AgreementBlock a={p.agreement_questions?.length ? p.agreement : null} names={p.agreement_questions ?? []} />
 
       <ActionHistory rows={actions} signals={[...p.signals, ...p.resolved]} />
     </>
@@ -279,13 +279,12 @@ function ActionHistory({ rows, signals }: { rows: ActionRow[]; signals: Signal[]
 }
 
 /** Согласие сторон: на сколько в среднем стажёр оценивает выше/ниже наставника и разброс разницы. */
-function AgreementBlock({ a, intern, mentor }: { a?: Agreement | null; intern: (number | null)[]; mentor: (number | null)[] }) {
-  const both = intern.filter((v, i) => v !== null && mentor[i] !== null && mentor[i] !== undefined).length;
+function AgreementBlock({ a, names }: { a?: Agreement | null; names: string[] }) {
   return (
     <section className="sheet" aria-labelledby="agree-title">
       <div className="sheet__head">
         <h2 id="agree-title">Согласие сторон</h2>
-        <span className="sheet__meta">разница «стажёр − наставник» по месяцам</span>
+        <span className="sheet__meta">разница ответов на сопоставимые вопросы</span>
       </div>
       {a ? (
         <>
@@ -293,15 +292,14 @@ function AgreementBlock({ a, intern, mentor }: { a?: Agreement | null; intern: (
             <b className={Math.abs(a.bias) >= 1 ? 'prec__low' : undefined}>Смещение {signed(a.bias, 2)}</b>: {biasText(a.bias)}.
           </p>
           <p className="muted">
-            В 95% месяцев разница укладывается в {signed(a.loa_lo, 2)}…{signed(a.loa_hi, 2)} балла · {a.n}{' '}
+            Стажёр — «{names[0]}». Наставник — «{names[1]}». Расчётные границы разницы {signed(a.loa_lo, 2)}…{signed(a.loa_hi, 2)} балла · {a.n}{' '}
             {plural(a.n, 'месяц', 'месяца', 'месяцев')} с оценками обеих сторон.
             {Math.abs(a.bias) >= 1 ? ' Разрыв больше балла — стороны видят стажировку по-разному, стоит обсудить ожидания.' : ''}
           </p>
         </>
       ) : (
         <p className="muted">
-          Нет данных: сервер не прислал расчёт согласия{both < 2 ? ', и месяцев с оценками обеих сторон меньше двух' : ''}. Появится после обновления сервера
-          (контракт R4) — считается по месяцам, где ответили и стажёр, и наставник.
+          Для расчёта нужны ответы на сопоставимые вопросы обеих сторон хотя бы за два месяца.
         </p>
       )}
     </section>
